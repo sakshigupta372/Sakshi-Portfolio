@@ -103,10 +103,10 @@ const Hero = () => {
           </div>
 
           {/* Profile Photo with Stats */}
-          <div className="hidden lg:flex flex-col items-center space-y-6 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+          <div className="flex flex-col items-center space-y-6 animate-fade-in" style={{ animationDelay: '0.5s' }}>
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-full blur-2xl animate-pulse"></div>
-              <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl shadow-white/20 group hover:scale-105 transition-transform duration-500">
+              <div className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl shadow-white/20 group hover:scale-105 transition-transform duration-500">
                 <img 
                   src="/profile.jpg" 
                   alt="Sakshi Gupta"
