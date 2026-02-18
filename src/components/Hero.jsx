@@ -104,13 +104,8 @@ const Hero = () => {
                 />
               </motion.div>
               
-              {/* Quote & Description */}
-              <motion.div className="max-w-2xl space-y-4" variants={itemVariants}>
-                <p className="text-xl sm:text-2xl text-white font-medium leading-relaxed italic relative">
-                  <span className="absolute -left-4 -top-2 text-white/20 text-4xl">"</span>
-                  Building the bridge between what AI says and what AI does.
-                  <span className="absolute -right-2 -bottom-2 text-white/20 text-4xl">"</span>
-                </p>
+              {/* Description */}
+              <motion.div className="max-w-2xl" variants={itemVariants}>
                 <p className="text-base sm:text-lg text-gray-400 leading-relaxed">
                   Specializing in{' '}
                   <span className="text-white font-medium">multi-agent orchestration</span>,{' '}
