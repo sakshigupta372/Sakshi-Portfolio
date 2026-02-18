@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { Copy, Check, Menu, X, Brain } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Copy, Check, Menu, X, Briefcase, Code2, User, Mail } from 'lucide-react'
 
 const Navbar = () => {
   const [copied, setCopied] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [hoveredItem, setHoveredItem] = useState(null)
 
   const copyEmail = () => {
     navigator.clipboard.writeText('sg6227174@gmail.com')
@@ -15,8 +17,40 @@ const Navbar = () => {
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
+      setIsMenuOpen(false)
     }
   }
+
+  const navItems = [
+    {
+      id: 'projects',
+      label: 'Projects',
+      icon: Briefcase,
+      description: 'Explore my AI & automation projects',
+      color: 'from-blue-500/20 to-purple-500/20'
+    },
+    {
+      id: 'stack',
+      label: 'Stack',
+      icon: Code2,
+      description: 'Technologies I work with',
+      color: 'from-green-500/20 to-emerald-500/20'
+    },
+    {
+      id: 'about',
+      label: 'About',
+      icon: User,
+      description: 'My journey and experience',
+      color: 'from-violet-500/20 to-fuchsia-500/20'
+    },
+    {
+      id: 'contact',
+      label: 'Contact',
+      icon: Mail,
+      description: 'Let\'s connect and collaborate',
+      color: 'from-orange-500/20 to-red-500/20'
+    }
+  ]
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-white/10">
@@ -28,31 +62,49 @@ const Navbar = () => {
             </span>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <button 
-              onClick={() => scrollToSection('projects')}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Projects
-            </button>
-            <button 
-              onClick={() => scrollToSection('stack')}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Stack
-            </button>
-            <button 
-              onClick={() => scrollToSection('about')}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              About
-            </button>
-            <button 
-              onClick={() => scrollToSection('contact')}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Contact
-            </button>
+          <div className="hidden md:flex items-center space-x-1">
+            {navItems.map((item) => (
+              <div 
+                key={item.id}
+                className="relative"
+                onMouseEnter={() => setHoveredItem(item.id)}
+                onMouseLeave={() => setHoveredItem(null)}
+              >
+                <button 
+                  onClick={() => scrollToSection(item.id)}
+                  className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors font-medium"
+                >
+                  {item.label}
+                </button>
+
+                {/* Hover Card */}
+                <AnimatePresence>
+                  {hoveredItem === item.id && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 pointer-events-none z-50"
+                    >
+                      <div className={`relative bg-gradient-to-br ${item.color} backdrop-blur-xl border border-white/20 rounded-xl p-4 shadow-2xl`}>
+                        <div className="flex items-start space-x-3">
+                          <div className="p-2 bg-white/10 rounded-lg">
+                            <item.icon className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-white font-semibold mb-1">{item.label}</h4>
+                            <p className="text-gray-300 text-sm">{item.description}</p>
+                          </div>
+                        </div>
+                        {/* Arrow */}
+                        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/10 backdrop-blur-xl border-t border-l border-white/20 rotate-45"></div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
 
           <button
@@ -80,48 +132,35 @@ const Navbar = () => {
           </button>
         </div>
 
-        {isMenuOpen && (
-          <div className="md:hidden border-t border-white/10 bg-dark/95 backdrop-blur-md">
-            <div className="px-4 py-4 space-y-3">
-              <button 
-                onClick={() => {
-                  scrollToSection('projects')
-                  setIsMenuOpen(false)
-                }}
-                className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-              >
-                Projects
-              </button>
-              <button 
-                onClick={() => {
-                  scrollToSection('stack')
-                  setIsMenuOpen(false)
-                }}
-                className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-              >
-                Stack
-              </button>
-              <button 
-                onClick={() => {
-                  scrollToSection('about')
-                  setIsMenuOpen(false)
-                }}
-                className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-              >
-                About
-              </button>
-              <button 
-                onClick={() => {
-                  scrollToSection('contact')
-                  setIsMenuOpen(false)
-                }}
-                className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-              >
-                Contact
-              </button>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden border-t border-white/10 bg-dark/95 backdrop-blur-md overflow-hidden"
+            >
+              <div className="px-4 py-4 space-y-2">
+                {navItems.map((item) => (
+                  <button 
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className="flex items-center space-x-3 w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group"
+                  >
+                    <div className="p-2 bg-white/5 rounded-lg group-hover:bg-white/10 transition-colors">
+                      <item.icon className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium">{item.label}</div>
+                      <div className="text-xs text-gray-500">{item.description}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   )
