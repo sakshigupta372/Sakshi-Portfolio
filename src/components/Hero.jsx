@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { ArrowRight, Linkedin, Download, Brain, Blocks } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight, Linkedin, Download, Sparkles, Code2 } from 'lucide-react'
 
 const Hero = () => {
   const [displayText, setDisplayText] = useState('')
@@ -18,6 +19,26 @@ const Hero = () => {
     
     return () => clearInterval(timer)
   }, [])
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+    }
+  }
 
   return (
     <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen flex items-center">
@@ -38,96 +59,156 @@ const Hero = () => {
       <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* OPTION 2: Side-by-Side Layout - ACTIVE */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <div className="space-y-8">
-            <div className="space-y-6">
-              {/* Animated Badge with Glassmorphism */}
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 animate-fade-in shadow-lg shadow-white/10">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <motion.div className="space-y-6" variants={itemVariants}>
+              {/* Animated Badge */}
+              <motion.div 
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 shadow-lg shadow-white/10"
+                whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.4)' }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="w-2 h-2 bg-white rounded-full"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
                 <span className="text-xs font-mono text-gray-300">Available for opportunities</span>
-              </div>
+              </motion.div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-sans leading-tight tracking-tight">
-                <span className="inline-block animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-white">Sakshi Gupta</span>
+              {/* Name with gradient */}
+              <motion.h1 
+                className="text-5xl sm:text-6xl lg:text-7xl font-bold font-sans leading-tight tracking-tight"
+                variants={itemVariants}
+              >
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-white animate-gradient">
+                  Sakshi Gupta
                 </span>
-              </h1>
+              </motion.h1>
               
-              <div className="space-y-3 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                <p className="text-xl sm:text-2xl lg:text-3xl text-white font-semibold tracking-tight">
+              {/* Role */}
+              <motion.div className="space-y-3" variants={itemVariants}>
+                <p className="text-2xl sm:text-3xl lg:text-4xl text-white font-semibold tracking-tight">
                   Agentic AI & Gen AI Developer
                 </p>
-                <div className="w-20 h-0.5 bg-gradient-to-r from-white via-gray-400 to-transparent rounded-full"></div>
-              </div>
+                <motion.div 
+                  className="w-20 h-0.5 bg-gradient-to-r from-white via-gray-400 to-transparent rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: 80 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                />
+              </motion.div>
               
-              <div className="max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                <p className="text-lg sm:text-xl text-white font-medium leading-relaxed mb-3 italic">
-                  "Building the bridge between what AI says and what AI does."
+              {/* Quote & Description */}
+              <motion.div className="max-w-2xl space-y-4" variants={itemVariants}>
+                <p className="text-xl sm:text-2xl text-white font-medium leading-relaxed italic relative">
+                  <span className="absolute -left-4 -top-2 text-white/20 text-4xl">"</span>
+                  Building the bridge between what AI says and what AI does.
+                  <span className="absolute -right-2 -bottom-2 text-white/20 text-4xl">"</span>
                 </p>
-                <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-                  Agentic AI Developer specializing in <span className="text-gray-300">multi-agent orchestration</span>, <span className="text-gray-300">custom MCP servers</span>, and <span className="text-gray-300">autonomous backend systems</span>.
+                <p className="text-base sm:text-lg text-gray-400 leading-relaxed">
+                  Specializing in{' '}
+                  <span className="text-white font-medium">multi-agent orchestration</span>,{' '}
+                  <span className="text-white font-medium">custom MCP servers</span>, and{' '}
+                  <span className="text-white font-medium">autonomous backend systems</span>.
                 </p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-              <button 
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4"
+              variants={itemVariants}
+            >
+              <motion.button 
                 onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
-                className="group relative flex items-center justify-center space-x-2 bg-white hover:bg-gray-100 text-black font-bold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-white/30 overflow-hidden"
+                className="group relative flex items-center justify-center space-x-2 bg-white text-black font-bold px-8 py-4 rounded-xl overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
                 <span className="relative z-10">View Projects</span>
                 <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </motion.button>
               
-              <a
+              <motion.a
                 href="/resume.pdf"
                 download="Sakshi_Gupta_Resume.pdf"
-                className="group relative flex items-center justify-center space-x-2 bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/20 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-white/20"
+                className="group relative flex items-center justify-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/20 text-white font-semibold px-8 py-4 rounded-xl"
+                whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.5)' }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Download size={20} className="group-hover:animate-bounce" />
                 <span>Download Resume</span>
-              </a>
+              </motion.a>
               
-              <a
+              <motion.a
                 href="https://www.linkedin.com/in/sakshi-gupta-ba858a292/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-center space-x-2 bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/20 hover:border-white/50 text-white font-semibold px-6 py-4 rounded-xl transition-all duration-300 hover:scale-105"
+                className="group flex items-center justify-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/20 text-white font-semibold px-6 py-4 rounded-xl"
+                whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.5)' }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Linkedin size={20} className="group-hover:scale-110 transition-transform" />
                 <span className="hidden lg:inline">LinkedIn</span>
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
           </div>
 
-          {/* Profile Photo with Stats */}
-          <div className="flex flex-col items-center space-y-6 animate-fade-in" style={{ animationDelay: '0.5s' }}>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-full blur-2xl animate-pulse"></div>
-              <div className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl shadow-white/20 group hover:scale-105 transition-transform duration-500">
+          {/* Profile Photo */}
+          <motion.div 
+            className="flex flex-col items-center space-y-6"
+            variants={itemVariants}
+          >
+            <motion.div 
+              className="relative"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.4 }}
+            >
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-full blur-2xl"
+                animate={{ opacity: [0.5, 0.8, 0.5] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+              <div className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl shadow-white/20 group">
                 <img 
                   src="/profile.jpg" 
                   alt="Sakshi Gupta"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
               </div>
               <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-            </div>
+            </motion.div>
             
-            {/* Elegant Tagline */}
-            <div className="mt-8 text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-              <p className="text-sm font-light tracking-[0.2em] text-gray-400 uppercase">
-                Specializing in
-              </p>
-              <p className="text-lg font-semibold tracking-tight text-white mt-1">
+            {/* Tagline Badge */}
+            <motion.div 
+              className="mt-8 inline-flex items-center space-x-2 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border border-white/20 rounded-full px-6 py-3"
+              variants={itemVariants}
+              whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.4)' }}
+            >
+              <Sparkles className="w-4 h-4 text-white" />
+              <p className="text-sm font-semibold tracking-tight text-white">
                 AI Agents & Automation
               </p>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
         {/* OPTION 3: Text Overlay on Photo - Uncomment below and comment out Option 2 above to use */}
         {/* <div className="max-w-4xl mx-auto">
