@@ -53,6 +53,18 @@ const Features = () => {
       featured: false,
       gradient: 'from-orange-500/20 to-red-500/20',
       size: 'medium'
+    },
+    {
+      id: 'hireboard-ai',
+      title: 'HireBoard-AI',
+      description: 'AI-Powered Hiring Platform for Job Seekers & Recruiters',
+      tags: ['FastAPI', 'SQLAlchemy', 'Next.js', 'TypeScript'],
+      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop',
+      demoLink: 'https://frontend-chi-blush.vercel.app/',
+      githubLink: 'https://github.com/sakshigupta372/HireBoard-AI',
+      featured: true,
+      gradient: 'from-cyan-500/20 to-blue-500/20',
+      size: 'medium'
     }
   ]
 
