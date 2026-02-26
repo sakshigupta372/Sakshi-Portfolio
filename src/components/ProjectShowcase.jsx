@@ -139,7 +139,7 @@ const ProjectShowcase = () => {
               <Sparkles className="w-4 h-4 text-white animate-pulse" />
               <ShinyText text="Featured Work" className="text-sm font-mono" speed={4} />
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-mono tracking-tight text-white leading-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight text-white leading-tight mb-4">
               Crafting <GradientText colors={['#a855f7', '#3b82f6', '#22d3ee', '#a855f7']} speed={5}>digital experiences</GradientText> that inspire.
             </h2>
             <p className="text-gray-400 text-base sm:text-lg mb-8">

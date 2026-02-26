@@ -123,6 +123,19 @@
   100% { background-position: 0% 50%; }
 }
 
+/* ReactBits: Aurora drift */
+@keyframes aurora-drift {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(3%, -2%) rotate(1deg) scale(1.02); }
+  100% { transform: translate(-2%, 3%) rotate(-1deg) scale(0.98); }
+}
+
+/* ReactBits: StarBorder rotate */
+@keyframes star-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Scroll Reveal Animations - Optimized for Speed */
 .scroll-reveal {
   opacity: 0;

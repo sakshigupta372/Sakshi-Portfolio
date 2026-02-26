@@ -32,7 +32,7 @@ const ProfileCard = () => {
             <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
             <span className="text-sm font-mono text-gray-300">About Me</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-mono mb-4">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-display mb-4">
             <span className="text-white">Get to </span>
             <GradientText colors={['#a855f7', '#3b82f6', '#a855f7']} speed={6}>Know Me</GradientText>
           </h2>
@@ -178,7 +178,7 @@ const ProfileCard = () => {
                     className="mb-6"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
-                      <h2 className="text-2xl sm:text-3xl font-bold text-white font-mono">Sakshi Gupta</h2>
+                      <h2 className="text-2xl sm:text-3xl font-bold text-white font-display">Sakshi Gupta</h2>
                       <span className="inline-flex items-center px-3 py-1 rounded-md bg-purple-500/20 text-xs font-medium w-fit border border-purple-500/30">
                         <ShinyText text="Agentic AI Developer" className="text-purple-400" speed={3} />
                       </span>

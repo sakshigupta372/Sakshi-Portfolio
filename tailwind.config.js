@@ -15,6 +15,7 @@ export default {
       fontFamily: {
         mono: ['JetBrains Mono', 'Courier New', 'monospace'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Sora', 'Inter', 'system-ui', 'sans-serif'],
       },
       animation: {
         'marquee': 'marquee 30s linear infinite',

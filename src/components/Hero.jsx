@@ -86,7 +86,7 @@ const Hero = () => {
               </motion.div>
               
               {/* Name with gradient */}
-              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold font-sans leading-tight tracking-tight">
+              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold font-display leading-tight tracking-tight">
                 <SplitText
                   text="Sakshi Gupta"
                   className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-white"
@@ -97,7 +97,7 @@ const Hero = () => {
               
               {/* Role */}
               <motion.div className="space-y-3" variants={itemVariants}>
-                <p className="text-2xl sm:text-3xl lg:text-4xl text-white font-semibold tracking-tight">
+                <p className="text-2xl sm:text-3xl lg:text-4xl text-white font-semibold tracking-tight font-display">
                   <RotatingText
                     texts={[
                       'Agentic AI Developer',
