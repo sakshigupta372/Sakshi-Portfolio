@@ -1,16 +1,19 @@
 import React from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import ProfileCard from './components/ProfileCard'
+import ProjectShowcase from './components/ProjectShowcase'
 import TechStack from './components/TechStack'
-import Features from './components/Features'
 import Timeline from './components/Timeline'
 import ContactForm from './components/ContactForm'
 import Footer from './components/Footer'
 import ParticleBackground from './components/ParticleBackground'
 import CustomCursor from './components/CustomCursor'
+import ClickSpark from './components/reactbits/ClickSpark'
 
 function App() {
   return (
+    <ClickSpark sparkColor="#a855f7" sparkCount={10} sparkSize={8} duration={500}>
     <div className="min-h-screen bg-dark text-white relative overflow-hidden">
       <CustomCursor />
       <ParticleBackground />
@@ -23,19 +26,21 @@ function App() {
         <div className="absolute bottom-10 left-1/3 w-[500px] h-[500px] bg-gradient-to-tr from-white/10 via-white/5 to-transparent rounded-full blur-3xl opacity-50"></div>
         
         {/* Additional smaller orbs for depth */}
-        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] bg-white/8 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-[350px] h-[350px] bg-white/8 rounded-full blur-2xl"></div>
+        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] bg-white/[0.08] rounded-full blur-2xl"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-[350px] h-[350px] bg-white/[0.08] rounded-full blur-2xl"></div>
       </div>
       <div className="gradient-bg relative z-10">
         <Navbar />
         <Hero />
+        <ProfileCard />
+        <ProjectShowcase />
         <TechStack />
-        <Features />
         <Timeline />
         <ContactForm />
         <Footer />
       </div>
     </div>
+    </ClickSpark>
   )
 }
 

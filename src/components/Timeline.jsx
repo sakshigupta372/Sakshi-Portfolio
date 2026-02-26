@@ -1,5 +1,7 @@
 import React from 'react'
 import { Briefcase, GraduationCap, Award } from 'lucide-react'
+import SpotlightCard from './reactbits/SpotlightCard'
+import GradientText from './reactbits/GradientText'
 
 const Timeline = () => {
   const experiences = [
@@ -49,16 +51,17 @@ const Timeline = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold font-mono mb-4">
-            Experience & <span className="text-gradient">Education</span>
+            Experience & <GradientText colors={['#ffffff', '#a855f7', '#3b82f6', '#ffffff']} speed={6}>Education</GradientText>
           </h2>
           <p className="text-gray-400 text-lg">My journey in tech and AI development</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {experiences.map((exp, index) => (
-            <div
+            <SpotlightCard
               key={index}
               className="group bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:border-white/30 hover:shadow-xl hover:shadow-white/10 transition-all duration-300 hover:scale-[1.02]"
+              spotlightColor="rgba(168, 85, 247, 0.06)"
             >
               {/* Icon & Type Badge */}
               <div className="flex items-center justify-between mb-4">
@@ -90,7 +93,7 @@ const Timeline = () => {
                   <p className="text-xs text-gray-500 mt-2">+{exp.achievements.length - 2} more</p>
                 )}
               </div>
-            </div>
+            </SpotlightCard>
           ))}
         </div>
       </div>

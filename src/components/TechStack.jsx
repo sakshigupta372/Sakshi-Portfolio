@@ -1,4 +1,6 @@
 import React from 'react'
+import GradientText from './reactbits/GradientText'
+import Magnet from './reactbits/Magnet'
 
 const TechStack = () => {
   const skills = [
@@ -39,19 +41,20 @@ const TechStack = () => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold font-mono mb-4">
-            Tech <span className="text-gradient">Stack</span>
+            Tech <GradientText colors={['#ffffff', '#22d3ee', '#3b82f6', '#ffffff']} speed={5}>Stack</GradientText>
           </h2>
           <p className="text-gray-400 text-lg">Tools and technologies I work with</p>
         </div>
 
         <div className="flex flex-wrap justify-center gap-3">
           {skills.map((skill, idx) => (
-            <span
-              key={idx}
-              className={`${sizeClasses[skill.size]} bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border border-white/30 rounded-full font-medium text-gray-300 hover:text-white hover:bg-white/15 hover:border-white/50 hover:scale-110 hover:shadow-lg hover:shadow-white/20 transition-all duration-300 cursor-default`}
-            >
-              {skill.name}
-            </span>
+            <Magnet key={idx} strength={0.15} range={100}>
+              <span
+                className={`${sizeClasses[skill.size]} bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border border-white/30 rounded-full font-medium text-gray-300 hover:text-white hover:bg-white/15 hover:border-white/50 hover:scale-110 hover:shadow-lg hover:shadow-white/20 transition-all duration-300 cursor-default inline-block`}
+              >
+                {skill.name}
+              </span>
+            </Magnet>
           ))}
         </div>
       </div>

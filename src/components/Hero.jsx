@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Linkedin, Download, Sparkles, Code2 } from 'lucide-react'
+import SplitText from './reactbits/SplitText'
+import RotatingText from './reactbits/RotatingText'
+import Magnet from './reactbits/Magnet'
+import ShinyText from './reactbits/ShinyText'
 
 const Hero = () => {
   const [displayText, setDisplayText] = useState('')
@@ -78,23 +82,31 @@ const Hero = () => {
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
-                <span className="text-xs font-mono text-gray-300">Available for opportunities</span>
+                <ShinyText text="Available for opportunities" className="text-xs font-mono" speed={4} />
               </motion.div>
               
               {/* Name with gradient */}
-              <motion.h1 
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold font-sans leading-tight tracking-tight"
-                variants={itemVariants}
-              >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-white animate-gradient">
-                  Sakshi Gupta
-                </span>
-              </motion.h1>
+              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold font-sans leading-tight tracking-tight">
+                <SplitText
+                  text="Sakshi Gupta"
+                  className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-white"
+                  delay={0.3}
+                  duration={0.6}
+                />
+              </div>
               
               {/* Role */}
               <motion.div className="space-y-3" variants={itemVariants}>
                 <p className="text-2xl sm:text-3xl lg:text-4xl text-white font-semibold tracking-tight">
-                  Agentic AI & Gen AI Developer
+                  <RotatingText
+                    texts={[
+                      'Agentic AI Developer',
+                      'Gen AI Engineer',
+                      'Multi-Agent Architect',
+                      'AI Systems Builder',
+                    ]}
+                    interval={3000}
+                  />
                 </p>
                 <motion.div 
                   className="w-20 h-0.5 bg-gradient-to-r from-white via-gray-400 to-transparent rounded-full"
@@ -119,32 +131,36 @@ const Hero = () => {
               className="flex flex-col sm:flex-row gap-4"
               variants={itemVariants}
             >
-              <motion.button 
-                onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
-                className="group relative flex items-center justify-center space-x-2 bg-white text-black font-bold px-8 py-4 rounded-xl overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-                <span className="relative z-10">View Projects</span>
-                <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+              <Magnet strength={0.2}>
+                <motion.button 
+                  onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
+                  className="group relative flex items-center justify-center space-x-2 bg-white text-black font-bold px-8 py-4 rounded-xl overflow-hidden"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <span className="relative z-10">View Projects</span>
+                  <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </Magnet>
               
-              <motion.a
-                href="/resume.pdf"
-                download="Sakshi_Gupta_Resume.pdf"
-                className="group relative flex items-center justify-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/20 text-white font-semibold px-8 py-4 rounded-xl"
-                whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.5)' }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Download size={20} className="group-hover:animate-bounce" />
-                <span>Download Resume</span>
-              </motion.a>
+              <Magnet strength={0.2}>
+                <motion.a
+                  href="/resume.pdf"
+                  download="Sakshi_Gupta_Resume.pdf"
+                  className="group relative flex items-center justify-center space-x-2 bg-white/5 backdrop-blur-sm border border-white/20 text-white font-semibold px-8 py-4 rounded-xl"
+                  whileHover={{ scale: 1.05, borderColor: 'rgba(255, 255, 255, 0.5)' }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Download size={20} className="group-hover:animate-bounce" />
+                  <span>Download Resume</span>
+                </motion.a>
+              </Magnet>
               
               <motion.a
                 href="https://www.linkedin.com/in/sakshi-gupta-ba858a292/"

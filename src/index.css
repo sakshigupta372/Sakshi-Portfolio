@@ -101,6 +101,28 @@
   background: #cccccc;
 }
 
+/* Hide scrollbar for carousel tabs */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ReactBits: ShinyText shimmer */
+@keyframes shiny-text {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
+}
+
+/* ReactBits: GradientText flow */
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 /* Scroll Reveal Animations - Optimized for Speed */
 .scroll-reveal {
   opacity: 0;

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Send, Mail, User, MessageSquare } from 'lucide-react'
+import SpotlightCard from './reactbits/SpotlightCard'
+import GradientText from './reactbits/GradientText'
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -69,7 +71,7 @@ const ContactForm = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold font-mono mb-4">
-            Get In <span className="text-gradient">Touch</span>
+            Get In <GradientText colors={['#ffffff', '#a855f7', '#ec4899', '#ffffff']} speed={6}>Touch</GradientText>
           </h2>
           <p className="text-gray-400 text-lg">
             Have a project in mind? Let's work together to build something amazing.
@@ -78,7 +80,7 @@ const ContactForm = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
-            <div className="bg-dark-secondary border border-white/10 rounded-xl p-6 hover:border-white/30 transition-colors">
+            <SpotlightCard className="bg-dark-secondary border border-white/10 rounded-xl p-6 hover:border-white/30 transition-colors" spotlightColor="rgba(168, 85, 247, 0.08)">
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-white/10 border border-white/30 rounded-lg flex items-center justify-center">
                   <Mail className="w-6 h-6 text-white" />
@@ -90,9 +92,9 @@ const ContactForm = () => {
                   </a>
                 </div>
               </div>
-            </div>
+            </SpotlightCard>
 
-            <div className="bg-dark-secondary border border-white/10 rounded-xl p-6">
+            <SpotlightCard className="bg-dark-secondary border border-white/10 rounded-xl p-6" spotlightColor="rgba(59, 130, 246, 0.08)">
               <h3 className="text-lg font-semibold mb-4">Why Work With Me?</h3>
               <ul className="space-y-3 text-gray-400">
                 <li className="flex items-start">
@@ -112,7 +114,7 @@ const ContactForm = () => {
                   <span>Fast response time and clear communication</span>
                 </li>
               </ul>
-            </div>
+            </SpotlightCard>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
