@@ -26,7 +26,7 @@ const Timeline = () => {
       period: '2024 - Present',
       description: 'Delivered scalable AI solutions for diverse clients, architecting robust backends and orchestrating complex API integrations. Specialized in building autonomous AI agents and multi-agent systems that streamlined workflows and optimized operational efficiency.',
       achievements: [
-        'Delivered AI agent solutions for 10+ clients globally',
+        'Delivered AI agent solutions for 4+ international clients',
         'Worked with Compliledger Team (California), Omelo, and CoinX',
         'Improved workflow efficiency through multi-agent systems'
       ]

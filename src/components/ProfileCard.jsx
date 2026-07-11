@@ -123,12 +123,12 @@ const ProfileCard = () => {
                           <div className="text-xs text-gray-400">Projects</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-lg sm:text-xl font-bold text-white"><CountUp target={10} suffix="+" duration={1800} /></div>
-                          <div className="text-xs text-gray-400">Clients</div>
+                          <div className="text-lg sm:text-xl font-bold text-white"><CountUp target={4} suffix="+" duration={1800} /></div>
+                          <div className="text-xs text-gray-400 leading-tight max-w-[5rem]">International Clients</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-lg sm:text-xl font-bold text-white"><CountUp target={2} suffix="+" duration={1200} /></div>
-                          <div className="text-xs text-gray-400">Years</div>
+                          <div className="text-lg sm:text-xl font-bold text-white"><CountUp target={1} suffix="+" duration={1200} /></div>
+                          <div className="text-xs text-gray-400 leading-tight max-w-[5rem]">Year Experience</div>
                         </div>
                       </div>
 
@@ -339,7 +339,7 @@ const ProfileCard = () => {
                                 <div>2024 - Present</div>
                               </div>
                               <p className="text-xs text-gray-300 mt-2 leading-relaxed">
-                                Delivered scalable AI solutions for 10+ clients globally including Compliledger Team (California), Omelo, and CoinX.
+                                Delivered scalable AI solutions for 4+ international clients including Compliledger Team (California), Omelo, and CoinX.
                               </p>
                             </div>
                           </div>
