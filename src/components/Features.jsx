@@ -150,7 +150,7 @@ const Features = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/60 to-transparent"></div>
                 
                 {/* Badges */}
-                {project.id === 'compliledger-rag' && (
+                {(project.id === 'compliledger-rag' || project.id === 'llm-gateway' || project.id === 'nexus-ai') && (
                   <div className="absolute top-3 left-3">
                     <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border border-white/30 rounded-full px-3 py-1">
                       <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
