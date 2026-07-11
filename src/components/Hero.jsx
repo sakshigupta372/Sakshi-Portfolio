@@ -176,35 +176,38 @@ const Hero = () => {
             </motion.div>
           </div>
 
-          {/* Profile Photo */}
+          {/* Profile Photo — glow portrait */}
           <motion.div 
             className="flex flex-col items-center space-y-6"
             variants={itemVariants}
           >
             <motion.div 
-              className="relative"
-              whileHover={{ scale: 1.05 }}
+              className="relative flex items-center justify-center w-56 h-64 sm:w-72 sm:h-80 lg:w-[22rem] lg:h-[26rem]"
+              whileHover={{ scale: 1.03 }}
               transition={{ duration: 0.4 }}
             >
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-full blur-2xl"
-                animate={{ opacity: [0.5, 0.8, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity }}
+              {/* Soft radial halo behind head */}
+              <motion.div
+                className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[90%] rounded-full bg-purple-500/30 blur-3xl"
+                animate={{ opacity: [0.45, 0.75, 0.45], scale: [1, 1.06, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               />
-              <div className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl shadow-white/20 group">
-                <img 
-                  src="/profile.jpg" 
+              <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-3/4 h-3/4 rounded-full bg-blue-400/20 blur-3xl" />
+
+              {/* Portrait with bottom fade into dark */}
+              <div
+                className="relative w-full h-full overflow-hidden"
+                style={{
+                  maskImage: 'linear-gradient(to bottom, black 55%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 55%, transparent 100%)',
+                }}
+              >
+                <img
+                  src="/profile.jpg"
                   alt="Sakshi Gupta"
-                  className="w-full h-full object-cover"
-                />
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
+                  className="w-full h-full object-cover object-top scale-105"
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
             </motion.div>
             
             {/* Tagline Badge */}
