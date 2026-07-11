@@ -77,6 +77,18 @@ const Features = () => {
       featured: true,
       gradient: 'from-teal-500/20 to-cyan-500/20',
       size: 'medium'
+    },
+    {
+      id: 'nexus-ai',
+      title: 'NEXUS.AI – AI Interview Simulation Platform',
+      description: 'An agentic AI interview platform that simulates real technical, HR, system design, and coding interviews using Google Gemini. It generates adaptive questions, evaluates responses in real time, and provides detailed feedback with personalized learning roadmaps and downloadable reports.',
+      tags: ['Next.js', 'Node.js', 'Express.js', 'MongoDB', 'Google Gemini', 'Agentic AI'],
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop',
+      demoLink: 'https://ai-interview-platform-nr7v.vercel.app',
+      githubLink: 'https://github.com/sakshigupta372/ai-interview-platform',
+      featured: true,
+      gradient: 'from-indigo-500/20 to-purple-500/20',
+      size: 'medium'
     }
   ]
 
