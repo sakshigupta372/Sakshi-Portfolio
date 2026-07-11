@@ -65,6 +65,18 @@ const Features = () => {
       featured: true,
       gradient: 'from-cyan-500/20 to-blue-500/20',
       size: 'medium'
+    },
+    {
+      id: 'llm-gateway',
+      title: 'Multi-Tenant LLM Gateway',
+      description: 'A production-ready AI gateway that sits between applications and multiple LLM providers, offering per-tenant authentication, intelligent provider routing, semantic caching, rate limiting, budget enforcement, and cost tracking.',
+      tags: ['FastAPI', 'Next.js', 'SQLite', 'LLM Gateway', 'Multi-Tenant'],
+      image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop',
+      demoLink: 'https://multi-tenant-llm-gateway.vercel.app',
+      githubLink: 'https://github.com/sakshigupta372/Multi-Tenant-LLM-Gateway',
+      featured: true,
+      gradient: 'from-teal-500/20 to-cyan-500/20',
+      size: 'medium'
     }
   ]
 
