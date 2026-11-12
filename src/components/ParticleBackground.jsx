@@ -21,6 +21,8 @@ const ParticleBackground = () => {
         this.size = Math.random() * 2 + 1
         this.speedX = Math.random() * 0.5 - 0.25
         this.speedY = Math.random() * 0.5 - 0.25
+        // Alternate between rose and lavender
+        this.color = Math.random() > 0.5 ? [255, 90, 0] : [255, 143, 74]
       }
 
       update() {
@@ -34,7 +36,8 @@ const ParticleBackground = () => {
       }
 
       draw() {
-        ctx.fillStyle = 'rgba(0, 255, 136, 0.5)'
+        const [r, g, b] = this.color
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.6)`
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
         ctx.fill()
@@ -58,7 +61,8 @@ const ParticleBackground = () => {
           const distance = Math.sqrt(dx * dx + dy * dy)
 
           if (distance < 100) {
-            ctx.strokeStyle = `rgba(0, 255, 136, ${1 - distance / 100})`
+            const [r, g, b] = particle.color
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${(1 - distance / 100) * 0.6})`
             ctx.lineWidth = 0.5
             ctx.beginPath()
             ctx.moveTo(particle.x, particle.y)

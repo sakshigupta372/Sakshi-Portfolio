@@ -15,8 +15,10 @@ const ScrollAnimations = () => {
       })
     }, observerOptions)
 
-    // Observe all elements with scroll-reveal class
-    const elements = document.querySelectorAll('.scroll-reveal')
+    // Observe all reveal variants
+    const elements = document.querySelectorAll(
+      '.scroll-reveal, .scroll-reveal-glass, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-pop'
+    )
     elements.forEach((el) => observer.observe(el))
 
     return () => observer.disconnect()

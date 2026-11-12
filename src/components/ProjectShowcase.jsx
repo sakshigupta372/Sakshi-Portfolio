@@ -1,297 +1,336 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Sparkles, ExternalLink, Github } from 'lucide-react'
-import GradientText from './reactbits/GradientText'
-import ShinyText from './reactbits/ShinyText'
+import React, { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowUpRight, BookOpen, Github, Star, X } from 'lucide-react'
+import { RevealWords } from './Reveal'
+import { PROJECTS, isLiveDemo } from '../data/projects.js'
+import { useGithubRepos } from '../lib/github.js'
+import { Link } from '../lib/router.jsx'
+import { trackEvent } from '../lib/analytics.js'
 
-const isGithubUrl = (url) => typeof url === 'string' && url.includes('github.com')
+export { PROJECTS }
 
-const PROJECTS = [
-  {
-    id: 1,
-    title: 'NEXUS.AI – AI Interview Simulation Platform',
-    impact: 'Cuts interview prep time with adaptive Gemini feedback across technical, HR, and system-design rounds.',
-    description: 'Agentic AI interview platform with adaptive questions and real-time evaluation.',
-    image: '/projects/nexus.jpg',
-    bgColor: 'bg-indigo-500/10',
-    demoLink: 'https://ai-interview-platform-one-wine.vercel.app',
-    githubLink: 'https://github.com/sakshigupta372/ai-interview-platform',
-    tags: ['Next.js', 'Node.js', 'Gemini'],
-    gradient: 'from-indigo-500 to-purple-500',
-    featured: true,
-  },
-  {
-    id: 2,
-    title: 'Multi-Tenant LLM Gateway',
-    impact: 'Tracks LLM cost per tenant with caching, rate limits, and intelligent provider routing.',
-    description: 'Production AI gateway with auth, routing, semantic caching, and cost tracking.',
-    image: '/projects/llm-gateway.jpg',
-    bgColor: 'bg-teal-500/10',
-    demoLink: 'https://multi-tenant-llm-gateway.vercel.app',
-    githubLink: 'https://github.com/sakshigupta372/Multi-Tenant-LLM-Gateway',
-    tags: ['FastAPI', 'Next.js', 'SQLite'],
-    gradient: 'from-teal-500 to-cyan-500',
-    featured: true,
-  },
-  {
-    id: 3,
-    title: 'Health Diagnosis System',
-    impact: 'Speeds clinical triage with a crew of specialized AI agents and Gemini Vision analysis.',
-    description: 'Multi-agent clinical decision support with medical image analysis.',
-    image: '/projects/health-diagnosis.jpg',
-    bgColor: 'bg-blue-500/10',
-    demoLink: null,
-    githubLink: 'https://github.com/sakshigupta372/Health_Diagnosis_System',
-    tags: ['Crew AI', 'Gemini', 'Streamlit'],
-    gradient: 'from-blue-500 to-purple-500',
-  },
-  {
-    id: 4,
-    title: 'AI Agent Observatory — Interactive 3D Observability & Debugging for AI Agents',
-    impact: 'Lets developers watch agent execution, tool calls, and memory retrieval unfold in real-time 3D.',
-    description: 'Interactive 3D platform for inspecting agent execution traces and failure points.',
-    image: '/projects/ai-agent-observatory.jpg',
-    bgColor: 'bg-fuchsia-500/10',
-    demoLink: 'https://ai-agent-observatory.onrender.com/',
-    githubLink: 'https://github.com/sakshigupta372/ai-agent-observatory',
-    tags: ['Three.js', 'Astro', 'pgvector'],
-    gradient: 'from-fuchsia-500 to-rose-500',
-  },
-  {
-    id: 5,
-    title: 'RAG Chatbot',
-    impact: 'Answers site questions from your own content — privacy-first RAG, no generic chat fluff.',
-    description: 'Privacy-first RAG chatbot powered by Gemini 2.5 Pro and embeddings.',
-    image: '/projects/compliledger.jpg',
-    bgColor: 'bg-violet-500/10',
-    demoLink: 'https://compliagent.vercel.app',
-    githubLink: 'https://github.com/sakshigupta372',
-    tags: ['RAG', 'Gemini', 'LangChain'],
-    gradient: 'from-violet-500 to-fuchsia-500',
-  },
-  {
-    id: 6,
-    title: 'Audit-AI',
-    impact: 'Turns messy website audits into clear PDF reports covering a11y, mobile, and AI analysis.',
-    description: 'AI website auditor with Gradio UI and downloadable PDF reports.',
-    image: '/projects/audit-ai.jpg',
-    bgColor: 'bg-orange-500/10',
-    demoLink: 'https://auditai-2d83.onrender.com',
-    githubLink: 'https://github.com/sakshigupta372/AuditAI',
-    tags: ['Python', 'Gradio', 'Gemini'],
-    gradient: 'from-orange-500 to-red-500',
-  },
-  {
-    id: 7,
-    title: 'HireBoard-AI',
-    impact: 'Connects seekers and recruiters on one AI-assisted hiring workflow — less back-and-forth.',
-    description: 'AI hiring platform with FastAPI backend and Next.js frontend.',
-    image: '/projects/hireboard.jpg',
-    bgColor: 'bg-cyan-500/10',
-    demoLink: 'https://frontend-chi-blush.vercel.app/',
-    githubLink: 'https://github.com/sakshigupta372/HireBoard-AI',
-    tags: ['FastAPI', 'Next.js', 'TypeScript'],
-    gradient: 'from-cyan-500 to-blue-500',
-  },
-]
+const FILTERS = ['All', 'Agents', 'Infra', 'Apps']
+
+const hasLive = isLiveDemo
+
+function hostname(project) {
+  if (!hasLive(project)) return 'github.com preview'
+  try {
+    return new URL(project.demoLink).hostname.replace('www.', '')
+  } catch {
+    return 'live preview'
+  }
+}
 
 function ProjectImage({ project, className = '' }) {
   const [src, setSrc] = useState(project.image)
-
-  const handleError = () => setSrc(null)
-
   if (!src) {
     return (
-      <div className={`flex items-center justify-center bg-gradient-to-br ${project.gradient} opacity-40 ${className}`}>
-        <span className="px-4 text-center text-sm font-mono text-white/80">{project.title}</span>
+      <div className={`flex items-center justify-center bg-line/40 ${className}`}>
+        <span className="font-mono text-sm text-muted">{project.short}</span>
       </div>
     )
   }
-
   return (
     <img
       src={src}
-      alt={`${project.title} product screenshot`}
-      className={`w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500 ${className}`}
-      onError={handleError}
+      alt={`${project.title} screenshot`}
+      className={`h-full w-full object-cover object-top ${className}`}
+      onError={() => setSrc(null)}
       loading="lazy"
     />
   )
 }
 
-function ProjectActions({ project, size = 'default' }) {
-  const hasLiveDemo = Boolean(project.demoLink) && !isGithubUrl(project.demoLink)
-  const btn =
-    size === 'large'
-      ? 'px-4 py-2.5 text-sm'
-      : 'px-3 py-2 text-xs sm:text-sm'
-
+function ActionLinks({ project }) {
+  const track = (kind) => (e) => {
+    e.stopPropagation()
+    trackEvent('project_click', { project: project.short, kind })
+  }
   return (
-    <div className="flex gap-2">
-      {hasLiveDemo ? (
+    <div className="flex flex-wrap gap-2">
+      {project.slug ? (
+        <Link
+          to={`/work/${project.slug}`}
+          onClick={track('case_study')}
+          className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90"
+        >
+          <BookOpen className="h-3.5 w-3.5" />
+          Case study
+        </Link>
+      ) : null}
+      {hasLive(project) ? (
         <a
           href={project.demoLink}
           target="_blank"
           rel="noopener noreferrer"
-          className={`flex-1 flex items-center justify-center gap-1.5 ${btn} bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition-all`}
+          onClick={track('demo')}
+          className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper hover:opacity-80"
         >
-          <ExternalLink className="w-3.5 h-3.5" />
-          Live Demo
+          Live demo
+          <ArrowUpRight className="h-3.5 w-3.5" />
         </a>
       ) : null}
       <a
         href={project.githubLink}
         target="_blank"
         rel="noopener noreferrer"
-        className={`${hasLiveDemo ? 'flex-1' : 'w-full'} flex items-center justify-center gap-1.5 ${btn} bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white font-medium hover:bg-white/20 transition-all`}
+        onClick={track('code')}
+        className="inline-flex items-center gap-1.5 rounded-full border border-line px-4 py-2 text-sm font-medium text-ink hover:border-ink"
       >
-        <Github className="w-3.5 h-3.5" />
-        View Code
+        <Github className="h-3.5 w-3.5" />
+        Code
       </a>
     </div>
   )
 }
 
-function FeaturedCard({ project, index }) {
+// Live star count from GitHub; renders nothing until loaded or if the repo has 0.
+function Stars({ project }) {
+  const repos = useGithubRepos()
+  const stars = project.repo ? repos?.[project.repo.toLowerCase()]?.stars : undefined
+  if (!stars) return null
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group relative"
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-line px-2 py-0.5 font-mono text-[10px] text-muted"
+      title={`${stars} GitHub star${stars === 1 ? '' : 's'}`}
     >
-      <div className={`absolute -inset-0.5 bg-gradient-to-r ${project.gradient} rounded-2xl opacity-0 group-hover:opacity-25 blur-xl transition-all duration-500`} />
-      <div className="relative h-full bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden group-hover:border-white/30 transition-all duration-500 flex flex-col">
-        <div className={`relative h-56 sm:h-72 overflow-hidden ${project.bgColor}`}>
-          <ProjectImage project={project} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-            <span className="text-[10px] font-mono px-2 py-1 bg-white text-black rounded-full font-semibold">
-              Featured
-            </span>
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] font-mono px-2 py-1 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="p-5 sm:p-6 flex flex-col flex-1">
-          <h3 className="text-xl sm:text-2xl font-bold text-white font-display mb-2 tracking-tight">
-            {project.title}
-          </h3>
-          <p className="text-sm sm:text-base text-white/90 mb-2 leading-relaxed font-medium">
-            {project.impact}
-          </p>
-          <p className="text-sm text-gray-400 mb-5 leading-relaxed flex-1">
-            {project.description}
-          </p>
-          <ProjectActions project={project} size="large" />
-        </div>
-      </div>
-    </motion.div>
+      <Star className="h-3 w-3 fill-current text-accent" />
+      {stars}
+    </span>
   )
 }
 
-function GridCard({ project, index }) {
+function ProjectCard({ project, index, selected, onOpen }) {
+  const number = String(index + 1).padStart(2, '0')
+  return (
+    <div className="relative" style={{ minHeight: selected ? 380 : undefined }}>
+      {!selected ? (
+        <motion.article
+          layoutId={`float-${project.id}`}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface text-left"
+        >
+            <button
+            type="button"
+            onClick={() => {
+              trackEvent('project_click', { project: project.short, kind: 'preview' })
+              onOpen(project.id)
+            }}
+            className="flex flex-1 flex-col text-left"
+          >
+            <motion.div
+              className="relative h-48 overflow-hidden sm:h-56"
+              initial={{ clipPath: 'inset(100% 0 0 0)' }}
+              whileInView={{ clipPath: 'inset(0% 0 0 0)' }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.85, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ProjectImage project={project} className="transition-transform duration-700 group-hover:scale-[1.06]" />
+            </motion.div>
+            <div className="flex flex-1 flex-col p-5 pb-3">
+              <div className="flex items-center justify-between gap-3">
+                <p className="font-mono text-[11px] tracking-[0.18em] text-muted">{number} · {project.type}</p>
+                <span className="flex items-center gap-2">
+                  <Stars project={project} />
+                  <span className="text-[11px] text-muted opacity-0 transition-opacity group-hover:opacity-100">Preview →</span>
+                </span>
+              </div>
+              <h3 className="mt-2 font-display text-3xl tracking-tight text-ink">{project.short}</h3>
+              <p className="mt-1 text-sm text-muted">{project.title}</p>
+              <p className="mt-3 text-sm leading-relaxed text-ink/75">{project.built}</p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="rounded-full border border-line px-2 py-0.5 font-mono text-[10px] text-muted">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </button>
+          <div className="px-5 pb-5">
+            <ActionLinks project={project} />
+          </div>
+        </motion.article>
+      ) : (
+        <div className="h-full min-h-[380px] rounded-2xl border border-dashed border-line bg-paper" />
+      )}
+    </div>
+  )
+}
+
+function FloatingWindow({ project, onClose }) {
+  const live = hasLive(project)
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [onClose])
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: (index % 3) * 0.1 }}
-      className="group relative"
+      className="fixed inset-0 z-[80] flex items-center justify-center px-3 py-6 sm:px-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
-      <div className={`absolute -inset-0.5 bg-gradient-to-r ${project.gradient} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`} />
-      <div className="relative h-full bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden group-hover:border-white/30 transition-all duration-500 flex flex-col">
-        <div className={`relative h-44 sm:h-48 overflow-hidden ${project.bgColor}`}>
-          <ProjectImage project={project} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[90%]">
-            {project.tags.slice(0, 3).map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] font-mono px-2 py-1 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white"
-              >
-                {tag}
-              </span>
-            ))}
+      <button
+        type="button"
+        aria-label="Close preview"
+        onClick={onClose}
+        className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+      />
+      <motion.div
+        layoutId={`float-${project.id}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${project.short} live preview`}
+        className="relative z-10 flex h-[min(88vh,860px)] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_40px_80px_rgb(var(--ink)/0.18)]"
+        initial={{ y: 30 }}
+        animate={{ y: 0 }}
+        exit={{ y: 24, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+      >
+        <div className="flex items-center gap-3 border-b border-line bg-paper px-4 py-3">
+          <div className="flex gap-1.5">
+            <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+            <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+            <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+          </div>
+          <div className="min-w-0 flex-1 truncate rounded-md bg-line/50 px-3 py-1 text-center font-mono text-[11px] text-muted">
+            {hostname(project)}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md p-1 text-muted hover:bg-line hover:text-ink"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="grid min-h-0 flex-1 lg:grid-cols-[1.4fr_0.9fr]">
+          <div className="relative min-h-[240px] bg-ink">
+            {live ? (
+              <iframe
+                src={project.demoLink}
+                title={`${project.short} live preview`}
+                className="h-full w-full border-0 bg-white"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              />
+            ) : (
+              <ProjectImage project={project} />
+            )}
+          </div>
+          <div className="flex flex-col overflow-y-auto border-t border-line p-5 sm:p-6 lg:border-l lg:border-t-0">
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">{project.type}</span>
+            <h3 className="mt-3 font-display text-3xl text-ink">{project.short}</h3>
+            <p className="mt-1 text-sm text-muted">{project.title}</p>
+            <dl className="mt-5 space-y-4 text-sm leading-relaxed">
+              <div>
+                <dt className="font-mono text-[10px] tracking-[0.2em] text-muted">PROBLEM</dt>
+                <dd className="mt-1 text-ink/80">{project.problem}</dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[10px] tracking-[0.2em] text-muted">WHAT I BUILT</dt>
+                <dd className="mt-1 text-ink/80">{project.built}</dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[10px] tracking-[0.2em] text-muted">RESULT</dt>
+                <dd className="mt-1 text-ink/80">{project.result}</dd>
+              </div>
+            </dl>
+            <div className="mt-5 flex flex-wrap gap-1.5">
+              {project.tags.map((tag) => (
+                <span key={tag} className="rounded-full border border-line px-2 py-0.5 font-mono text-[10px] text-muted">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="mt-6">
+              <ActionLinks project={project} />
+            </div>
           </div>
         </div>
-        <div className="p-5 flex flex-col flex-1">
-          <h3 className="text-lg font-bold text-white font-mono mb-2">{project.title}</h3>
-          <p className="text-sm text-white/85 mb-2 leading-relaxed font-medium">{project.impact}</p>
-          <p className="text-xs sm:text-sm text-gray-400 mb-5 leading-relaxed flex-1">
-            {project.description}
-          </p>
-          <ProjectActions project={project} />
-        </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
 
 const ProjectShowcase = () => {
-  const featured = PROJECTS.filter((p) => p.featured)
-  const rest = PROJECTS.filter((p) => !p.featured)
+  const [filter, setFilter] = useState('All')
+  const [openId, setOpenId] = useState(null)
+  const visible = PROJECTS.filter((p) => filter === 'All' || p.category === filter)
+  const openProject = PROJECTS.find((p) => p.id === openId) || null
 
   return (
-    <section id="projects" className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-      </div>
-
-      <div className="max-w-[1400px] mx-auto w-full relative z-10">
-        <motion.div
+    <section id="projects" className="relative scroll-mt-24 border-t border-line px-5 py-24 sm:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-6xl">
+        <motion.header
+          className="mb-10 flex flex-col gap-6 sm:mb-12 lg:flex-row lg:items-end lg:justify-between"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.55 }}
         >
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 mb-6">
-            <Sparkles className="w-4 h-4 text-white animate-pulse" />
-            <ShinyText text="Featured Work" className="text-sm font-mono" speed={4} />
+          <div>
+            <p className="mb-4 font-mono text-[11px] tracking-[0.22em] text-muted">02 — Work</p>
+            <div className="flex items-start gap-2">
+              <RevealWords
+                as="h2"
+                text="Selected work"
+                className="font-display text-4xl tracking-tight text-ink sm:text-5xl"
+              />
+              <span className="mt-1 font-sans text-base text-muted">{PROJECTS.length}</span>
+            </div>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
+              Click a card for a live preview, or open a case study for the full story.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight text-white leading-tight mb-4 max-w-3xl mx-auto">
-            Crafting{' '}
-            <GradientText colors={['#a855f7', '#3b82f6', '#22d3ee', '#a855f7']} speed={5}>
-              digital experiences
-            </GradientText>{' '}
-            that inspire.
-          </h2>
-          <p className="text-gray-400 text-base sm:text-lg mb-8">
-            Building the future with AI Agents, Automation, and Intelligent Systems
-          </p>
-          <motion.button
-            onClick={() => window.open('https://github.com/sakshigupta372', '_blank')}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3.5 rounded-full bg-white text-black font-medium text-sm sm:text-base hover:bg-gray-200 transition-colors duration-200"
-          >
-            View All Projects
-          </motion.button>
-        </motion.div>
+          <div className="flex flex-wrap gap-1">
+            {FILTERS.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setFilter(item)}
+                className={`px-3 py-1.5 text-sm transition-colors ${
+                  filter === item ? 'text-ink' : 'text-muted hover:text-ink'
+                }`}
+              >
+                {item}
+                {filter === item ? <span className="ml-1">—</span> : null}
+              </button>
+            ))}
+          </div>
+        </motion.header>
 
-        {/* Featured duo */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-10">
-          {featured.map((project, index) => (
-            <FeaturedCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
-
-        {/* Remaining projects */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {rest.map((project, index) => (
-            <GridCard key={project.id} project={project} index={index} />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {visible.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+              selected={openId === project.id}
+              onOpen={setOpenId}
+            />
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {openProject ? <FloatingWindow project={openProject} onClose={() => setOpenId(null)} /> : null}
+      </AnimatePresence>
     </section>
   )
 }

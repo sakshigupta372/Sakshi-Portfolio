@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import ProfileCard from './components/ProfileCard'
@@ -7,39 +8,88 @@ import TechStack from './components/TechStack'
 import Timeline from './components/Timeline'
 import ContactForm from './components/ContactForm'
 import Footer from './components/Footer'
-import ParticleBackground from './components/ParticleBackground'
-import CustomCursor from './components/CustomCursor'
-import ClickSpark from './components/reactbits/ClickSpark'
-import Aurora from './components/reactbits/Aurora'
-import Noise from './components/reactbits/Noise'
+import ScrollProgress from './components/ScrollProgress'
+import ScrollAnimations from './components/ScrollAnimations'
+import SmoothScroll, { scrollToId } from './components/SmoothScroll'
+import ToastHost from './components/Toast'
+import { ThemeProvider } from './theme/ThemeProvider'
+import { matchCaseStudy, peekPendingSection, takePendingSection, usePath } from './lib/router.jsx'
+
+// Not needed for first paint: split into their own chunks.
+const CommandPalette = lazy(() => import('./components/CommandPalette'))
+const AgentChat = lazy(() => import('./components/AgentChat'))
+const GithubActivity = lazy(() => import('./components/GithubActivity'))
+const CaseStudy = lazy(() => import('./pages/CaseStudy'))
+
+function Home() {
+  // Coming back from a case study via a nav link: finish the scroll once the
+  // home page has its real height (Lenis measures asynchronously).
+  useEffect(() => {
+    if (!peekPendingSection()) return undefined
+    const timers = []
+    let id = null
+    const attempt = (n) => {
+      id = id || takePendingSection()
+      if (!id) return
+      window.lenis?.resize?.()
+      scrollToId(id)
+      if (n < 3) {
+        timers.push(
+          setTimeout(() => {
+            // Settled if the section's top sits in the upper part of the viewport.
+            const top = document.getElementById(id)?.getBoundingClientRect().top ?? 0
+            if (top < 0 || top > window.innerHeight * 0.4) attempt(n + 1)
+          }, 1300)
+        )
+      }
+    }
+    timers.push(setTimeout(() => attempt(0), 150))
+    return () => timers.forEach(clearTimeout)
+  }, [])
+
+  return (
+    <main>
+      <Hero />
+      <ProfileCard />
+      <ProjectShowcase />
+      <TechStack />
+      <Suspense fallback={<div className="min-h-[40rem]" />}>
+        <GithubActivity />
+      </Suspense>
+      <Timeline />
+      <ContactForm />
+    </main>
+  )
+}
 
 function App() {
+  const path = usePath()
+  const slug = matchCaseStudy(path)
+
   return (
-    <ClickSpark sparkColor="#a855f7" sparkCount={10} sparkSize={8} duration={500}>
-    <div className="min-h-screen bg-dark text-white relative overflow-hidden">
-      <CustomCursor />
-      <ParticleBackground />
-      <Noise opacity={0.03} />
-      
-      {/* Aurora + Orb Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <Aurora />
-        <div className="absolute top-20 -left-20 w-[600px] h-[600px] bg-gradient-to-br from-white/8 via-white/3 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute top-1/4 -right-32 w-[700px] h-[700px] bg-gradient-to-bl from-white/6 via-white/3 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 left-1/3 w-[500px] h-[500px] bg-gradient-to-tr from-white/5 via-white/2 to-transparent rounded-full blur-3xl"></div>
-      </div>
-      <div className="gradient-bg relative z-10">
-        <Navbar />
-        <Hero />
-        <ProfileCard />
-        <ProjectShowcase />
-        <TechStack />
-        <Timeline />
-        <ContactForm />
-        <Footer />
-      </div>
-    </div>
-    </ClickSpark>
+    <ThemeProvider>
+      <SmoothScroll>
+        <div className="relative min-h-screen bg-paper text-ink">
+          <ScrollProgress />
+          <ScrollAnimations />
+          <Navbar />
+          {slug ? (
+            <Suspense fallback={<div className="min-h-screen" />}>
+              <CaseStudy key={slug} slug={slug} />
+            </Suspense>
+          ) : (
+            <Home />
+          )}
+          <Footer />
+          <Suspense fallback={null}>
+            <AgentChat />
+            <CommandPalette />
+          </Suspense>
+          <ToastHost />
+        </div>
+      </SmoothScroll>
+      <Analytics />
+    </ThemeProvider>
   )
 }
 

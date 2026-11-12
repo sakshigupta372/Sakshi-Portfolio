@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://sakshigupta.dev/sitemap.xml
+Disallow: /api/

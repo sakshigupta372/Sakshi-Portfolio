@@ -2,86 +2,89 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   Theme tokens. Space-separated RGB so Tailwind opacity modifiers work
+   (e.g. text-ink/70). Mode = .dark on <html>; accent = [data-palette].
+   --------------------------------------------------------------------------- */
+:root {
+  --paper: 247 247 251;
+  --surface: 255 255 255;
+  --ink: 14 17 32;
+  --muted: 100 106 126;
+  --line: 226 229 240;
+
+  /* default palette: indigo */
+  --accent: 79 70 229;
+  --accent-fg: 255 255 255;
+  color-scheme: light;
+}
+
+html.dark {
+  --paper: 9 11 20;
+  --surface: 17 20 33;
+  --ink: 236 239 250;
+  --muted: 138 146 170;
+  --line: 33 37 58;
+
+  --accent: 129 140 248;
+  --accent-fg: 9 11 20;
+  color-scheme: dark;
+}
+
+/* Accent palettes (light, then dark) */
+html[data-palette='emerald'] { --accent: 5 150 105; }
+html.dark[data-palette='emerald'] { --accent: 52 211 153; }
+
+html[data-palette='violet'] { --accent: 124 58 237; }
+html.dark[data-palette='violet'] { --accent: 167 139 250; }
+
+html[data-palette='rose'] { --accent: 225 29 72; }
+html.dark[data-palette='rose'] { --accent: 251 113 133; }
+
 @layer base {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
   body {
-    @apply bg-dark text-white font-sans;
+    background: rgb(var(--paper));
+    color: rgb(var(--ink));
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgb(var(--accent));
+    color: rgb(var(--accent-fg));
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .text-gradient,
+  .text-gradient-static {
+    color: rgb(var(--ink));
+    background: none;
+    -webkit-text-fill-color: currentColor;
   }
 
-  .glow-white {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  .glass-card {
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--line));
   }
 
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  }
-
+  .bg-gradient-primary,
   .gradient-bg {
-    background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+    background: rgb(var(--paper));
   }
-
-  /* Professional Animations */
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes gradient-shift {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.8s ease-out forwards;
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
-    opacity: 0;
-  }
-
-  .animate-gradient {
-    animation: gradient-shift 3s ease infinite;
-  }
-}
-
-.gradient-bg {
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
-    linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
-  background-attachment: fixed;
 }
 
 ::-webkit-scrollbar {
@@ -89,19 +92,31 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: rgb(var(--paper));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ffffff;
+  background: rgb(var(--muted) / 0.45);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #cccccc;
+  background: rgb(var(--ink));
 }
 
-/* Hide scrollbar for carousel tabs */
+/* Circular theme-switch reveal (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -110,37 +125,11 @@
   scrollbar-width: none;
 }
 
-/* ReactBits: ShinyText shimmer */
-@keyframes shiny-text {
-  0% { background-position: 100% 50%; }
-  100% { background-position: -100% 50%; }
-}
-
-/* ReactBits: GradientText flow */
-@keyframes gradient-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ReactBits: Aurora drift */
-@keyframes aurora-drift {
-  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-  50% { transform: translate(3%, -2%) rotate(1deg) scale(1.02); }
-  100% { transform: translate(-2%, 3%) rotate(-1deg) scale(0.98); }
-}
-
-/* ReactBits: StarBorder rotate */
-@keyframes star-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Scroll Reveal Animations - Optimized for Speed */
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .scroll-reveal.animate-in {
@@ -148,51 +137,31 @@
   transform: translateY(0);
 }
 
-.scroll-reveal-glass {
+.scroll-reveal-glass,
+.scroll-reveal-left,
+.scroll-reveal-right,
+.scroll-reveal-pop {
   opacity: 0;
-  transform: translateY(20px) scale(0.98);
-  transition: all 0.4s ease-out;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.scroll-reveal-glass.animate-in {
+.scroll-reveal-glass.animate-in,
+.scroll-reveal-left.animate-in,
+.scroll-reveal-right.animate-in,
+.scroll-reveal-pop.animate-in {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
 }
 
-/* Minimal staggered animations */
-.scroll-reveal:nth-child(1) { transition-delay: 0s; }
-.scroll-reveal:nth-child(2) { transition-delay: 0.05s; }
-.scroll-reveal:nth-child(3) { transition-delay: 0.1s; }
-.scroll-reveal:nth-child(4) { transition-delay: 0.15s; }
-.scroll-reveal:nth-child(5) { transition-delay: 0.2s; }
-.scroll-reveal:nth-child(6) { transition-delay: 0.25s; }
-
-/* Custom Cursor Styles */
-* {
-  cursor: none !important;
-}
-
-.custom-cursor-dot {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.15s ease-out;
-  mix-blend-mode: difference;
-}
-
-.custom-cursor-glow {
-  position: fixed;
-  width: 40px;
-  height: 40px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transition: transform 0.2s ease-out;
-  backdrop-filter: blur(2px);
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal-glass,
+  .scroll-reveal-left,
+  .scroll-reveal-right,
+  .scroll-reveal-pop {
+    transition: opacity 0.3s ease-out;
+    transform: none;
+  }
 }
