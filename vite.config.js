@@ -53,6 +53,15 @@ function localApi(env) {
 export default defineConfig(({ mode }) => {
   // '' prefix = load all vars (incl. GEMINI_API_KEY), but only for the server side.
   const env = loadEnv(mode, process.cwd(), '')
+
+  // index.html uses %VITE_SITE_URL%. If it's unset (e.g. on Vercel without the
+  // env var), Vite leaves the placeholder in and the build fails with
+  // "URI malformed". Fall back to Vercel's production domain, then localhost.
+  if (!env.VITE_SITE_URL) {
+    const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL
+    process.env.VITE_SITE_URL = vercelHost ? `https://${vercelHost}` : 'http://localhost:3000'
+  }
+
   return {
     plugins: [react(), localApi(env)],
     server: {
