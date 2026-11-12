@@ -12,6 +12,7 @@ import ScrollProgress from './components/ScrollProgress'
 import ScrollAnimations from './components/ScrollAnimations'
 import SmoothScroll, { scrollToId } from './components/SmoothScroll'
 import ToastHost from './components/Toast'
+import AmbientBackground from './components/AmbientBackground'
 import { ThemeProvider } from './theme/ThemeProvider'
 import { matchCaseStudy, peekPendingSection, takePendingSection, usePath } from './lib/router.jsx'
 
@@ -69,7 +70,9 @@ function App() {
   return (
     <ThemeProvider>
       <SmoothScroll>
-        <div className="relative min-h-screen bg-paper text-ink">
+        {/* `isolate` keeps the -z-10 background above this div's own bg-paper */}
+        <div className="relative isolate min-h-screen bg-paper text-ink">
+          <AmbientBackground />
           <ScrollProgress />
           <ScrollAnimations />
           <Navbar />
