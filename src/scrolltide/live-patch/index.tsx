@@ -31,6 +31,7 @@ import {
 } from "./rack";
 import { N, endDir, makeRope, ropePath, step, type Rope } from "./rope";
 import { ModHeader, ModuleCard, SkillList, signal, type Engine } from "./modules";
+import { SKILL_GROUPS, SKILLS } from "../../data/skills.js";
 
 /** The wiring shown on arrival: models and context feed the agents, the agents ship. */
 const PIPELINE: [JackId, JackId][] = [
@@ -597,7 +598,7 @@ export default function LivePatch() {
                   <span key={i} ref={(el) => void (beatDots.current[i] = el)} className="block size-[5px] rounded-full" style={{ background: i === 0 ? "#fff" : MOD.env.hue, opacity: 0.16 }} />
                 ))}
               </span>
-              <span className="font-jetbrains text-[10.5px] tracking-[0.06em] text-white/70">16 tools</span>
+              <span className="font-jetbrains text-[10.5px] tracking-[0.06em] text-white/70">{SKILLS.length} tools</span>
             </div>
             <div className="flex h-8 w-[84px] items-center gap-2 rounded-full bg-white/[0.045] px-3 ring-1 ring-white/[0.07]">
               <span className="relative flex size-[7px]">
@@ -634,25 +635,25 @@ export default function LivePatch() {
         <ModuleCard def={MOD.osc} lit={litOsc} x={MOD_X.osc} y={MOD_TOP} index={0}>
           <CoreRef m="osc" cores={cores} hue={MOD.osc.hue} />
           <ModHeader def={MOD.osc} lit={litOsc} />
-          <SkillList def={MOD.osc} lit={lit.osc} caption="The brains" skills={["OpenAI API","Groq API","Gemini Vision","Hugging Face","Transformers","NLP"]} />
+          <SkillList def={MOD.osc} lit={lit.osc} caption="The brains" skills={SKILL_GROUPS.models} />
         </ModuleCard>
 
         <ModuleCard def={MOD.env} lit={litEnv} x={MOD_X.env} y={MOD_TOP} index={1}>
           <CoreRef m="env" cores={cores} hue={MOD.env.hue} />
           <ModHeader def={MOD.env} lit={litEnv} led={envLed} />
-          <SkillList def={MOD.env} lit={lit.env} caption="What they can reach" skills={["MCP","RAG"]} />
+          <SkillList def={MOD.env} lit={lit.env} caption="What they can reach" skills={SKILL_GROUPS.context} />
         </ModuleCard>
 
         <ModuleCard def={MOD.flt} lit={litFlt} x={MOD_X.flt} y={MOD_TOP} index={2}>
           <CoreRef m="flt" cores={cores} hue={MOD.flt.hue} />
           <ModHeader def={MOD.flt} lit={litFlt} />
-          <SkillList def={MOD.flt} lit={lit.flt} caption="Plan and coordinate" skills={["LangGraph","CrewAI","LangChain","AutoGen","Multi-Agent Systems","Agent Orchestration"]} />
+          <SkillList def={MOD.flt} lit={lit.flt} caption="Plan and coordinate" skills={SKILL_GROUPS.agents} />
         </ModuleCard>
 
         <ModuleCard def={MOD.out} lit={litOut} x={MOD_X.out} y={MOD_TOP} index={3}>
           <CoreRef m="out" cores={cores} hue={MOD.out.hue} />
           <ModHeader def={MOD.out} lit={litOut} />
-          <SkillList def={MOD.out} lit={lit.out} caption="Out into the world" skills={["Docker","PyPi SDK"]} />
+          <SkillList def={MOD.out} lit={lit.out} caption="Out into the world" skills={SKILL_GROUPS.ship} />
         </ModuleCard>
 
         {/* jacks */}

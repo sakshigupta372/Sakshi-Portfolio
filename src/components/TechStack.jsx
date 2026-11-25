@@ -2,16 +2,11 @@ import React, { Suspense, lazy } from 'react'
 import { motion } from 'framer-motion'
 import { RevealWords } from './Reveal'
 import ScaledStage from './ScaledStage'
+import { SKILLS } from '../data/skills.js'
 import { H as BOARD_H, W as BOARD_W } from '../scrolltide/live-patch/rack.ts'
 
 // the patch board is only needed on wide screens, and only down the page
 const LivePatch = lazy(() => import('../scrolltide/live-patch/index.tsx'))
-
-const AGENT_SKILLS = [
-  'LangGraph', 'CrewAI', 'LangChain', 'AutoGen', 'Multi-Agent Systems', 'MCP',
-  'RAG', 'OpenAI API', 'Groq API', 'Gemini Vision', 'Hugging Face', 'Transformers',
-  'Docker', 'NLP', 'PyPi SDK', 'Agent Orchestration',
-]
 
 const group = {
   hidden: {},
@@ -51,7 +46,7 @@ const TechStack = () => {
           className="overflow-hidden rounded-2xl border border-line bg-[#070709]"
           fallback={
             <>
-              <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Agents & AI</p>
+              <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Agents, AI & backend</p>
               <motion.div
                 className="flex flex-wrap gap-2"
                 initial="hidden"
@@ -59,7 +54,7 @@ const TechStack = () => {
                 viewport={{ once: true, margin: '-60px' }}
                 variants={group}
               >
-                {AGENT_SKILLS.map((skill) => (
+                {SKILLS.map((skill) => (
                   <motion.span
                     key={skill}
                     variants={item}
