@@ -180,3 +180,32 @@ html.dark[data-palette='rose'] { --accent: 251 113 133; }
     transition: none;
   }
 }
+
+/* Footer: a hairline that draws in from the left on hover. */
+.bean-link {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1px;
+  padding-bottom: 2px;
+  transition:
+    background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease;
+}
+.bean-link:hover,
+.bean-link:focus-visible {
+  background-size: 100% 1px;
+  color: #17171a;
+  outline: none;
+}
+
+/* Dissolve the footer film's edges into the page so no frame line ever shows. On
+   wide screens it also runs under the link columns, so fade the right edge. */
+.bean-film {
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 90%, transparent);
+}
+@media (min-width: 1024px) {
+  .bean-film {
+    mask-image:
+      linear-gradient(to right, #000 62%, transparent 96%),
+      linear-gradient(to bottom, transparent, #000 14%, #000 92%, transparent);
+    mask-composite: intersect;
+  }
+}
