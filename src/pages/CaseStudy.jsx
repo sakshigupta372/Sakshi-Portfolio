@@ -8,6 +8,7 @@ import { Link, goToSection } from '../lib/router.jsx'
 import { useGithubRepos } from '../lib/github.js'
 import { trackEvent } from '../lib/analytics.js'
 import { scrollToTop } from '../components/SmoothScroll'
+import { HOME_META, applyMeta, caseStudyMeta } from '../lib/seo.js'
 
 const ease = [0.22, 1, 0.36, 1]
 const fade = (delay = 0) => ({
@@ -16,18 +17,17 @@ const fade = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease },
 })
 
-function useDocumentMeta(title, description) {
+// Restores the home tags on leave: the page may have been loaded straight from
+// this case study's own HTML file, so "previous values" aren't the home ones.
+function usePageMeta(slug, project, cs) {
   useEffect(() => {
-    const prevTitle = document.title
-    const meta = document.querySelector('meta[name="description"]')
-    const prevDesc = meta?.getAttribute('content')
-    document.title = title
-    if (meta && description) meta.setAttribute('content', description)
-    return () => {
-      document.title = prevTitle
-      if (meta && prevDesc) meta.setAttribute('content', prevDesc)
-    }
-  }, [title, description])
+    const meta =
+      project && cs
+        ? caseStudyMeta(project, cs)
+        : { ...HOME_META, path: `/work/${slug}`, title: 'Not found | Sakshi Gupta' }
+    applyMeta(meta, import.meta.env.VITE_SITE_URL)
+    return () => applyMeta(HOME_META, import.meta.env.VITE_SITE_URL)
+  }, [slug, project, cs])
 }
 
 const Section = ({ eyebrow, title, children }) => (
@@ -67,10 +67,7 @@ const CaseStudy = ({ slug }) => {
   const repos = useGithubRepos()
   const stars = project?.repo ? repos?.[project.repo.toLowerCase()]?.stars : undefined
 
-  useDocumentMeta(
-    project ? `${project.short} — Case study | Sakshi Gupta` : 'Not found | Sakshi Gupta',
-    cs?.tagline
-  )
+  usePageMeta(slug, project, cs)
 
   useEffect(() => {
     scrollToTop({ immediate: true })
@@ -136,22 +133,24 @@ const CaseStudy = ({ slug }) => {
                   <ArrowUpRight size={15} />
                 </a>
               ) : null}
-              <a
-                href={project.githubLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent('project_click', { project: project.short, kind: 'code' })}
-                className="inline-flex items-center gap-1.5 rounded-full border border-line px-5 py-2.5 text-sm font-medium text-ink hover:border-ink"
-              >
-                <Github size={15} />
-                Source
-                {stars ? (
-                  <span className="ml-1 inline-flex items-center gap-0.5 font-mono text-xs text-muted">
-                    <Star size={11} className="fill-current text-accent" />
-                    {stars}
-                  </span>
-                ) : null}
-              </a>
+              {project.githubLink ? (
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent('project_click', { project: project.short, kind: 'code' })}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-line px-5 py-2.5 text-sm font-medium text-ink hover:border-ink"
+                >
+                  <Github size={15} />
+                  Source
+                  {stars ? (
+                    <span className="ml-1 inline-flex items-center gap-0.5 font-mono text-xs text-muted">
+                      <Star size={11} className="fill-current text-accent" />
+                      {stars}
+                    </span>
+                  ) : null}
+                </a>
+              ) : null}
             </div>
           </motion.div>
         </header>

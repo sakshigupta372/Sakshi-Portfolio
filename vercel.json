@@ -4,7 +4,12 @@
     "api/chat.js": { "maxDuration": 30 },
     "api/contact.js": { "maxDuration": 10 }
   },
-  "rewrites": [{ "source": "/work/:slug", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/work/agent-observatory", "destination": "/work/agent-observatory/index.html" },
+    { "source": "/work/llm-gateway", "destination": "/work/llm-gateway/index.html" },
+    { "source": "/work/nexus-ai", "destination": "/work/nexus-ai/index.html" },
+    { "source": "/work/:slug", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

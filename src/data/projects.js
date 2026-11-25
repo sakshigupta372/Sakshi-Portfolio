@@ -3,6 +3,7 @@
 //
 // `slug` = project has a case-study page at /work/<slug> (see caseStudies.js).
 // `repo` = GitHub repo name, used to show the live star count.
+// `githubLink: null` = no public repository; the Code button is hidden.
 
 export const PROJECTS = [
   {
@@ -79,7 +80,7 @@ export const PROJECTS = [
     result: 'Answers come from the source material — no generic model fluff.',
     image: '/projects/compliledger.webp',
     demoLink: 'https://compliagent.vercel.app',
-    githubLink: 'https://github.com/sakshigupta372',
+    githubLink: null,
     tags: ['RAG', 'Gemini', 'LangChain'],
   },
   {

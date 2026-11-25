@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, BookOpen, Github, Star, X } from 'lucide-react'
 import { RevealWords } from './Reveal'
+import Quarto from './quarto/Quarto'
 import { PROJECTS, isLiveDemo } from '../data/projects.js'
 import { useGithubRepos } from '../lib/github.js'
 import { Link } from '../lib/router.jsx'
@@ -10,6 +11,10 @@ import { trackEvent } from '../lib/analytics.js'
 export { PROJECTS }
 
 const FILTERS = ['All', 'Agents', 'Infra', 'Apps']
+const VIEWS = ['Book', 'Grid']
+
+// The open book needs two pages side by side, which is too small to read on a phone.
+const defaultView = () => (window.matchMedia('(min-width: 768px)').matches ? 'Book' : 'Grid')
 
 const hasLive = isLiveDemo
 
@@ -71,16 +76,18 @@ function ActionLinks({ project }) {
           <ArrowUpRight className="h-3.5 w-3.5" />
         </a>
       ) : null}
-      <a
-        href={project.githubLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={track('code')}
-        className="inline-flex items-center gap-1.5 rounded-full border border-line px-4 py-2 text-sm font-medium text-ink hover:border-ink"
-      >
-        <Github className="h-3.5 w-3.5" />
-        Code
-      </a>
+      {project.githubLink ? (
+        <a
+          href={project.githubLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={track('code')}
+          className="inline-flex items-center gap-1.5 rounded-full border border-line px-4 py-2 text-sm font-medium text-ink hover:border-ink"
+        >
+          <Github className="h-3.5 w-3.5" />
+          Code
+        </a>
+      ) : null}
     </div>
   )
 }
@@ -269,6 +276,7 @@ function FloatingWindow({ project, onClose }) {
 }
 
 const ProjectShowcase = () => {
+  const [view, setView] = useState(defaultView)
   const [filter, setFilter] = useState('All')
   const [openId, setOpenId] = useState(null)
   const visible = PROJECTS.filter((p) => filter === 'All' || p.category === filter)
@@ -295,37 +303,67 @@ const ProjectShowcase = () => {
               <span className="mt-1 font-sans text-base text-muted">{PROJECTS.length}</span>
             </div>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-              Click a card for a live preview, or open a case study for the full story.
+              {view === 'Book'
+                ? 'Open the book and turn through the projects, or switch to the grid to see them all at once.'
+                : 'Click a card for a live preview, or open a case study for the full story.'}
             </p>
           </div>
-          <div className="flex flex-wrap gap-1">
-            {FILTERS.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => setFilter(item)}
-                className={`px-3 py-1.5 text-sm transition-colors ${
-                  filter === item ? 'text-ink' : 'text-muted hover:text-ink'
-                }`}
-              >
-                {item}
-                {filter === item ? <span className="ml-1">—</span> : null}
-              </button>
-            ))}
+          <div className="flex flex-col items-start gap-3 lg:items-end">
+            <div className="inline-flex rounded-full border border-line bg-surface p-1" role="group" aria-label="Project view">
+              {VIEWS.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  aria-pressed={view === item}
+                  onClick={() => {
+                    setView(item)
+                    trackEvent('project_view', { view: item })
+                  }}
+                  className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
+                    view === item ? 'bg-ink text-paper' : 'text-muted hover:text-ink'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            {view === 'Grid' ? (
+              <div className="flex flex-wrap gap-1">
+                {FILTERS.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setFilter(item)}
+                    className={`px-3 py-1.5 text-sm transition-colors ${
+                      filter === item ? 'text-ink' : 'text-muted hover:text-ink'
+                    }`}
+                  >
+                    {item}
+                    {filter === item ? <span className="ml-1">—</span> : null}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
         </motion.header>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {visible.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-              selected={openId === project.id}
-              onOpen={setOpenId}
-            />
-          ))}
-        </div>
+        {view === 'Book' ? (
+          <div className="qt-panel">
+            <Quarto />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {visible.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                selected={openId === project.id}
+                onOpen={setOpenId}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <AnimatePresence>

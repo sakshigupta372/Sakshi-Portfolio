@@ -1,5 +1,6 @@
 // Converts site images to WebP next to the originals.
-//   node scripts/optimize-images.mjs
+//   node scripts/optimize-images.mjs            (all images)
+//   node scripts/optimize-images.mjs nexus      (only the ones named, without extension)
 // Originals are kept; the app references the .webp files.
 import { readFileSync, writeFileSync, statSync } from 'fs'
 import path from 'path'
@@ -20,9 +21,13 @@ const JOBS = [
 
 const MIME = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png' }
 
+const only = process.argv.slice(2)
+const jobs = JOBS.filter((job) => !only.length || only.includes(path.parse(job.src).name))
+if (!jobs.length) throw new Error(`No image matches: ${only.join(', ')}`)
+
 const chrome = await launchChrome()
 try {
-  for (const job of JOBS) {
+  for (const job of jobs) {
     const file = path.join(root, job.src)
     const ext = path.extname(file).toLowerCase()
     const dataUrl = `data:${MIME[ext]};base64,${readFileSync(file).toString('base64')}`

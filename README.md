@@ -1,61 +1,99 @@
-# Sakshi Gupta - Agentic AI Developer Portfolio
+# Sakshi Gupta — Portfolio
 
-A modern, high-performance portfolio website showcasing expertise in Blockchain AI Protocols and IoT Systems.
+Portfolio site for an Agentic AI developer: selected projects, case studies, live GitHub activity, an
+"Ask my agent" chat and a contact form.
 
-## 🚀 Features
+## Features
 
-- **Modern Dark Theme**: Technical dark mode with electric green (#00ff88) accents
-- **Responsive Design**: Fully mobile-friendly and optimized for all screen sizes
-- **Interactive Components**:
-  - Copy-to-clipboard email functionality
-  - Typing animation in hero section
-  - Infinite marquee for skills showcase
-  - Live terminal simulation
-  - Smooth scrolling navigation
-- **Bento Grid Layout**: Modern card-based project showcase
-- **Performance Optimized**: Built with Vite for lightning-fast load times
-- **Beautiful Animations**: Framer Motion and Tailwind animations throughout
+- Home page with project showcase, tech stack, experience and contact sections
+- A hero portrait you can grab, stretch and wobble, drawn with WebGL2 (`src/face/`)
+- Projects as a 3D board book you can open and turn (`src/components/quarto/`), with a grid view
+- Case study pages with animated architecture diagrams (`/work/<slug>`)
+- "Ask my agent" chat, answered by Gemini from the site's own content, with built-in answers when no model is configured
+- Contact form delivered by email through Resend, with a mail-app fallback if sending fails
+- Command palette (`Ctrl`/`⌘` + `K`), light and dark mode, and four accent colours
+- GitHub repositories, activity and contribution calendar, fetched in the browser
+- Per-page meta tags, canonical URLs and a sitemap generated at build time
 
-## 🛠️ Tech Stack
+## Tech stack
 
-- **Framework**: React 18
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **Animations**: Framer Motion
-- **Fonts**: Inter & JetBrains Mono
+React 18, Vite 6, Tailwind CSS, Framer Motion, Lenis, Lucide icons and Vercel Analytics.
+Two serverless functions on Vercel handle the chat and the contact form.
 
-## 📦 Installation
+## Getting started
+
+Needs Node 18, 20 or 22+ (the image scripts need 22+).
 
 ```bash
-# Install dependencies
 npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
+npm run dev      # http://localhost:3000
 ```
 
-## 🎨 Design Features
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Development server, including `/api/chat` and `/api/contact` |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
 
-- Deep charcoal background (#0a0a0a)
-- Primary accent color: Electric green (#00ff88)
-- Monospace typography for developer aesthetic
-- Hover effects with subtle glow animations
-- Terminal-inspired code blocks
-- Bento-grid project layout
+## Environment variables
 
-## 📧 Contact
+Copy `.env.example` to `.env.local` and fill in what you need. On Vercel, add them under
+Project → Settings → Environment Variables. Never commit keys.
 
-- **Email**: sg6227174@gmail.com
-- **LinkedIn**: [Sakshi Gupta](https://www.linkedin.com/in/sakshi-gupta)
-- **GitHub**: [github.com/sakshigupta](https://github.com/sakshigupta)
+| Variable | Needed for | Notes |
+| --- | --- | --- |
+| `GEMINI_API_KEY` | Chat model | Without it the chat uses its built-in answers |
+| `GEMINI_MODEL` | Optional | Defaults to `gemini-flash-latest` |
+| `RESEND_API_KEY` | Contact form | Without it the form offers to open the visitor's mail app |
+| `CONTACT_TO_EMAIL` | Optional | Where messages are delivered |
+| `CONTACT_FROM_EMAIL` | Optional | Without a verified domain, Resend only delivers to the account's own address |
+| `VITE_SITE_URL` | Optional | Used for canonical and social preview URLs; defaults to the Vercel production domain |
 
-## 📄 License
+## Project structure
 
-Built with ❤️ by Sakshi Gupta. 2026.
+```
+api/          Vercel functions (thin wrappers around server/)
+server/       Chat and contact handlers, shared request helpers
+scripts/      Image tools and the build-time SEO step
+public/       Images, résumé, favicon, robots.txt
+src/
+  components/ UI sections and widgets
+  data/       Projects, case studies and chat knowledge
+  lib/        Router, GitHub data, SEO tags, analytics
+  pages/      Case study page
+  theme/      Light/dark mode and accent colours
+```
+
+## Editing content
+
+- **Projects:** `src/data/projects.js`. Set `githubLink: null` if there is no public repository.
+- **Case studies:** `src/data/caseStudies.js`. For a new one, add its slug to the project and to
+  `CASE_STUDY_ORDER`, and add a matching rewrite in `vercel.json`.
+- **Chat answers:** `src/data/knowledge.js`
+- **Hero portrait:** `src/face/config.js` sets the photo, its landmarks and optional expression pictures
+- **Page title and description:** change both `index.html` and `HOME_META` in `src/lib/seo.js`
+- **Experience, stack and stats:** `Timeline.jsx`, `TechStack.jsx` and `ProfileCard.jsx` in `src/components/`
+
+## Images
+
+These need Chrome or Edge installed (set `CHROME_PATH` if it is somewhere unusual).
+
+```bash
+node scripts/capture-project-shots.mjs nexus   # screenshot a live demo
+node scripts/optimize-images.mjs nexus         # convert it to WebP
+node scripts/generate-og.mjs                   # rebuild the social share image
+```
+
+Leave out the name to process every image. Check screenshots before committing them.
+
+## Deployment
+
+The site deploys to Vercel as a Vite project. `vercel.json` sets the function limits, case study
+rewrites, caching and security headers.
+
+## Contact
+
+- Email: sg6227174@gmail.com
+- LinkedIn: [sakshi-gupta-ba858a292](https://www.linkedin.com/in/sakshi-gupta-ba858a292/)
+- GitHub: [sakshigupta372](https://github.com/sakshigupta372)
+- X: [@gupt27951](https://x.com/gupt27951)
