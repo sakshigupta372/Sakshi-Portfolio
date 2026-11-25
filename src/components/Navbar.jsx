@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Github, Linkedin, Menu, Search, X } from 'lucide-react'
 import Magnet from './reactbits/Magnet'
-import ThemeToggle from './ThemeToggle'
+import EmberToggle from './EmberToggle'
 import { scrollToTop } from './SmoothScroll'
 import { EMAIL, LINKS, isMac, togglePalette } from '../lib/ui'
 import { goToSection, navigate, usePath } from '../lib/router.jsx'
@@ -106,7 +106,7 @@ const Navbar = () => {
           aria-label="Primary"
           className={`pointer-events-auto mx-auto flex items-center justify-between gap-2 rounded-full border px-3 transition-[max-width,height,background-color,border-color,box-shadow] duration-500 ease-out sm:px-4 ${
             scrolled
-              ? 'h-12 max-w-[54rem] border-line bg-surface/80 shadow-[0_12px_32px_-14px_rgb(var(--ink)/0.35)] backdrop-blur-xl'
+              ? 'h-12 max-w-[56rem] border-line bg-surface/80 shadow-[0_12px_32px_-14px_rgb(var(--ink)/0.35)] backdrop-blur-xl'
               : 'h-14 max-w-[62rem] border-transparent bg-transparent'
           }`}
         >
@@ -126,7 +126,7 @@ const Navbar = () => {
                   type="button"
                   onClick={() => scrollTo(item.id)}
                   aria-current={active === item.id ? 'true' : undefined}
-                  className={`relative rounded-full px-3.5 py-1.5 text-[12px] uppercase tracking-[0.14em] transition-colors ${
+                  className={`relative rounded-full px-2.5 py-1.5 text-[12px] lg:px-3.5 uppercase tracking-[0.14em] transition-colors ${
                     active === item.id ? 'text-ink' : 'text-muted hover:text-ink'
                   }`}
                 >
@@ -166,7 +166,7 @@ const Navbar = () => {
               <Search size={16} />
             </button>
 
-            <ThemeToggle />
+            <EmberToggle />
 
             <Magnet strength={0.25} range={90} className="hidden sm:block">
               <a

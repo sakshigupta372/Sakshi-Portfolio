@@ -1,0 +1,112 @@
+/* Relay — a soft pill whose three states are layers that roll through it.
+   Colours follow the site theme; geometry is the component's, 200 × 60 px × var(--U). */
+.rl-btn {
+  --U: 0.86px;
+  position: relative;
+  width: calc(200 * var(--U));
+  height: calc(60 * var(--U));
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: rgb(var(--ink));
+  font: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(120% 140% at 50% 0%, rgb(var(--surface)) 0%, rgb(var(--surface)) 40%, rgb(var(--line)) 100%);
+  box-shadow:
+    inset 0 calc(1 * var(--U)) 0 rgb(255 255 255 / 0.14),
+    0 0 0 1px rgb(var(--ink) / 0.14),
+    0 calc(2 * var(--U)) calc(3 * var(--U)) rgb(var(--accent) / 0.14),
+    0 calc(12 * var(--U)) calc(24 * var(--U)) calc(-10 * var(--U)) rgb(var(--accent) / 0.45);
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.4, 0.5, 1),
+    box-shadow 0.25s;
+  -webkit-tap-highlight-color: transparent;
+}
+.rl-btn:hover {
+  transform: translateY(calc(-1 * var(--U)));
+}
+.rl-btn:active {
+  transform: translateY(calc(0.5 * var(--U))) scale(0.975);
+  transition-duration: 0.08s;
+}
+.rl-btn:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 4px;
+}
+.rl-btn:disabled {
+  cursor: progress;
+}
+
+.rl-label,
+.rl-track,
+.rl-done {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rl-label,
+.rl-done {
+  font-weight: 600;
+  font-size: calc(16.5 * var(--U));
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+}
+[data-on='false'].rl-label,
+[data-on='false'].rl-track,
+[data-on='false'].rl-done {
+  opacity: 0;
+}
+
+/* the groove and its fill: a dot that stretches to the end */
+.rl-track {
+  left: calc(22 * var(--U));
+  right: calc(22 * var(--U));
+}
+.rl-track::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: calc(9 * var(--U));
+  margin-top: calc(-4.5 * var(--U));
+  border-radius: 99px;
+  background: rgb(var(--line));
+  box-shadow: inset 0 calc(1 * var(--U)) calc(2 * var(--U)) rgb(var(--ink) / 0.2);
+}
+.rl-track i {
+  position: absolute;
+  left: calc(1 * var(--U));
+  top: 50%;
+  height: calc(7 * var(--U));
+  margin-top: calc(-3.5 * var(--U));
+  width: calc(7 * var(--U) + var(--p, 0) * (100% - 9 * var(--U)));
+  border-radius: 99px;
+  background: rgb(var(--accent));
+  box-shadow: inset 0 calc(1 * var(--U)) 0 rgb(255 255 255 / 0.25);
+}
+
+.rl-done {
+  gap: calc(9 * var(--U));
+}
+.rl-tick {
+  display: grid;
+  place-items: center;
+  width: calc(22 * var(--U));
+  height: calc(22 * var(--U));
+  border-radius: 50%;
+  background: rgb(var(--accent));
+}
+.rl-tick svg {
+  width: 72%;
+  height: 72%;
+  fill: none;
+  stroke: rgb(var(--accent-fg));
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

@@ -1,0 +1,66 @@
+/* Pip, shrunk to sit on the chat button. */
+.pip {
+  position: relative;
+  display: block;
+  width: 108px;
+  height: 108px;
+}
+/* smaller on phones, so it covers less of the page */
+@media (max-width: 639px) {
+  .pip {
+    width: 72px;
+    height: 72px;
+  }
+}
+.pip-gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* without WebGL2 there is no figure, only the button */
+.pip[data-flat='true'] {
+  display: none;
+}
+.pip-z {
+  position: absolute;
+  right: 14px;
+  top: 22px;
+  font-style: italic;
+  font-weight: 600;
+  color: rgb(var(--muted));
+  pointer-events: none;
+}
+.pip-z b {
+  position: absolute;
+  font-weight: inherit;
+  opacity: 0;
+}
+.pip[data-asleep='true'] .pip-z b {
+  animation: pip-z 3.2s ease-in infinite;
+}
+.pip-z b:nth-child(1) {
+  font-size: 11px;
+}
+.pip-z b:nth-child(2) {
+  font-size: 14px;
+  animation-delay: 1.05s !important;
+}
+.pip-z b:nth-child(3) {
+  font-size: 18px;
+  animation-delay: 2.1s !important;
+}
+@keyframes pip-z {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-8deg);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -30px) rotate(10deg);
+  }
+}

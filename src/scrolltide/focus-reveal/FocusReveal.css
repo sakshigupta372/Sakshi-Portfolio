@@ -1,0 +1,105 @@
+/* ==========================================================================
+   FocusReveal — words sit blurred until a camera-style focus frame travels
+   to them and brings them sharp. No dependencies.
+   ========================================================================== */
+
+.fr {
+  --fr-blur: 5px;
+  --fr-border: #150cc7;
+  --fr-color: #fff;
+  --fr-dur: 500ms;
+  --fr-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fr-dim: 0.6;
+  --fr-gap: 0.4em;
+  --fr-stroke: max(2px, 0.036em);
+  --fr-arm: 0.3em;
+
+  position: relative; /* the offsetParent every word is measured against */
+  display: block;
+  margin: 0;
+  color: var(--fr-color);
+}
+
+.fr-word {
+  display: inline-block;
+  filter: blur(var(--fr-blur));
+  opacity: var(--fr-dim);
+  transition: filter var(--fr-dur) var(--fr-ease),
+    opacity var(--fr-dur) var(--fr-ease);
+  will-change: filter;
+}
+
+.fr-word:not(:last-child) {
+  margin-right: var(--fr-gap);
+}
+
+.fr-word.is-on {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* --- The focus frame ---------------------------------------------------- */
+
+.fr-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  /* Size is animated alongside the travel so the frame stretches into the
+     next word's width instead of snapping when it arrives. */
+  transition: transform var(--fr-dur) var(--fr-ease),
+    width var(--fr-dur) var(--fr-ease), height var(--fr-dur) var(--fr-ease);
+  will-change: transform, width, height;
+}
+
+/* Four corner brackets, each two borders of a small square. */
+.fr-frame > i {
+  position: absolute;
+  width: var(--fr-arm);
+  height: var(--fr-arm);
+  border: var(--fr-stroke) solid var(--fr-border);
+}
+
+.fr-frame > i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.fr-frame > i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.fr-frame > i:nth-child(3) {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+.fr-frame > i:nth-child(4) {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+
+/* Manual mode makes the words interactive; keep the affordance honest. */
+.fr-word[tabindex] {
+  cursor: pointer;
+}
+
+.fr-word[tabindex]:focus-visible {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fr-word,
+  .fr-frame {
+    transition-duration: 1ms;
+  }
+}
