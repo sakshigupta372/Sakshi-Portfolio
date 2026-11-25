@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Loader2, Mail, RotateCcw } from 'lucide-react'
+import { Mail, RotateCcw } from 'lucide-react'
+import RelayButton from './RelayButton'
+import { DONE_MS } from '../scrolltide/relay/relayEngine.js'
 import { RevealWords } from './Reveal'
 import { EMAIL } from '../lib/ui'
 import { trackEvent } from '../lib/analytics.js'
@@ -54,9 +56,11 @@ const SuccessMark = () => (
 const ContactForm = () => {
   const [formData, setFormData] = useState(EMPTY)
   const [errors, setErrors] = useState({})
-  // idle | sending | sent | error
+  // idle | sending | done (button shows its check) | sent | error
   const [status, setStatus] = useState('idle')
   const [errorText, setErrorText] = useState('')
+  const doneTimer = useRef(0)
+  useEffect(() => () => clearTimeout(doneTimer.current), [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -73,7 +77,8 @@ const ContactForm = () => {
       })
       const data = await res.json().catch(() => ({}))
       if (res.ok) {
-        setStatus('sent')
+        setStatus('done')
+        doneTimer.current = setTimeout(() => setStatus('sent'), DONE_MS)
         trackEvent('contact_submit', { result: 'sent' })
         return
       }
@@ -254,23 +259,7 @@ const ContactForm = () => {
                   </div>
                 ) : null}
 
-                <button
-                  type="submit"
-                  disabled={status === 'sending'}
-                  className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-80 disabled:opacity-60"
-                >
-                  {status === 'sending' ? (
-                    <>
-                      Sending…
-                      <Loader2 size={16} className="animate-spin" />
-                    </>
-                  ) : (
-                    <>
-                      Send message
-                      <ArrowRight size={16} />
-                    </>
-                  )}
-                </button>
+                <RelayButton phase={status === 'sending' || status === 'done' ? status : 'idle'} />
               </motion.form>
             )}
           </AnimatePresence>

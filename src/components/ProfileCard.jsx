@@ -1,8 +1,11 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Github, Linkedin, Mail } from 'lucide-react'
 import CountUp from './reactbits/CountUp'
-import { Reveal, RevealLine, RevealWords, fadeUp, stagger } from './Reveal'
+import { Reveal, RevealLine, fadeUp, stagger } from './Reveal'
+import FocusReveal from '../scrolltide/focus-reveal/FocusReveal.jsx'
+
+const HEADLINE = 'I architect autonomous systems that actually ship.'
 
 const STATS = [
   { value: 10, suffix: '+', label: 'Projects shipped' },
@@ -18,6 +21,8 @@ const DETAILS = [
 ]
 
 const ProfileCard = () => {
+  // reduced motion: every word stays sharp, not just the first
+  const still = useReducedMotion()
   return (
     <section id="about" className="relative scroll-mt-24 overflow-hidden border-t border-line px-5 py-24 sm:px-8 lg:py-32">
       <div className="mx-auto max-w-6xl">
@@ -28,10 +33,17 @@ const ProfileCard = () => {
 
         <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)] lg:gap-20">
           <div>
-            <RevealWords
+            <FocusReveal
               as="h2"
-              text="I architect autonomous systems that actually ship."
-              className="font-display text-4xl leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-[3.5rem]"
+              sentence={HEADLINE}
+              aria-label={HEADLINE}
+              color="rgb(var(--ink))"
+              borderColor="rgb(var(--accent))"
+              blur={still ? 0 : 1.6}
+              dim={still ? 1 : 0.7}
+              gap={0.26}
+              lineHeight={1.12}
+              className="font-display text-4xl tracking-tight sm:text-5xl lg:text-[3.5rem]"
             />
 
             <motion.div

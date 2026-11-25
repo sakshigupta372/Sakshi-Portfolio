@@ -48,6 +48,11 @@ export default {
         sora: ['Inter', 'system-ui', 'sans-serif'],
         'bean-display': ['Satoshi', 'Inter', 'system-ui', 'sans-serif'],
         'bean-text': ['Inter', 'system-ui', 'sans-serif'],
+        // patch board and experience ridge
+        bricolage: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+        jetbrains: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        hanken: ['"Hanken Grotesk"', 'system-ui', 'sans-serif'],
+        'geist-mono': ['"Geist Mono"', 'ui-monospace', 'monospace'],
       },
       spacing: {
         'bean-gutter': 'clamp(1.25rem, 5.1vw, 6.25rem)',

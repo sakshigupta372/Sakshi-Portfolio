@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowUp, ExternalLink, Sparkles, X } from 'lucide-react'
+import PipMascot from './PipMascot'
 import { SUGGESTIONS, answer, retrieve } from '../data/knowledge.js'
 import { EVENTS } from '../lib/ui'
 import { goToSection, navigate } from '../lib/router.jsx'
@@ -232,14 +233,20 @@ const AgentChat = () => {
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Ask my agent"
-            className="group fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-ink py-3 pl-4 pr-5 text-sm font-medium text-paper shadow-[0_16px_36px_-12px_rgb(var(--ink)/0.55)] transition-transform hover:-translate-y-0.5 sm:bottom-6 sm:right-6"
+            className="group fixed bottom-5 right-5 z-40 flex flex-col items-center sm:bottom-6 sm:right-6"
             initial={{ opacity: 0, scale: 0.85, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 12 }}
             transition={{ delay: 0.4, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Sparkles size={16} className="text-accent" />
-            Ask my agent
+            {/* Pip sits on the label; its feet overlap the top edge */}
+            <span className="-mb-4">
+              <PipMascot />
+            </span>
+            <span className="relative inline-flex items-center gap-2 rounded-full bg-ink py-3 pl-4 pr-5 text-sm font-medium text-paper shadow-[0_16px_36px_-12px_rgb(var(--ink)/0.55)] transition-transform group-hover:-translate-y-0.5">
+              <Sparkles size={16} className="text-accent" />
+              Ask my agent
+            </span>
           </motion.button>
         ) : null}
       </AnimatePresence>
