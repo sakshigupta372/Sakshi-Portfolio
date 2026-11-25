@@ -52,11 +52,11 @@ export const ENTRIES = [
     title: 'Tech stack',
     keywords: [
       'stack', 'tech', 'technologies', 'skills', 'tools', 'languages', 'frameworks', 'python', 'typescript',
-      'javascript', 'langgraph', 'crewai', 'langchain', 'autogen', 'fastapi', 'react', 'nextjs', 'docker',
+      'javascript', 'langgraph', 'crewai', 'langchain', 'autogen', 'fastapi', 'flask', 'aws', 'react', 'nextjs', 'docker',
     ],
     text:
-      'Agents: LangGraph, CrewAI, LangChain, AutoGen, MCP, RAG, Gemini, OpenAI and Groq APIs. ' +
-      'Backend: Python, FastAPI, Node.js, Express, Django, Flask, Postgres/pgvector, Redis, MongoDB, Supabase. ' +
+      'Agents: LangGraph, CrewAI, LangChain, AutoGen, MCP servers, RAG pipelines, Gemini, OpenAI and Groq APIs. ' +
+      'Backend: Python, FastAPI, Node.js, Express, Django, Flask, Postgres/pgvector, Redis, MongoDB, Supabase. Cloud: AWS. ' +
       'Frontend: React, Next.js, TypeScript, Tailwind. Plus Docker, Git, and a PyPI SDK for agent deployment.',
     actions: [{ label: 'Tech stack', section: 'stack' }],
   },
