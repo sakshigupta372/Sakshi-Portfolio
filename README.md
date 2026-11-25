@@ -8,6 +8,7 @@ Portfolio site for an Agentic AI developer: selected projects, case studies, liv
 - Home page with project showcase, tech stack, experience and contact sections
 - A hero portrait you can grab, stretch and wobble, drawn with WebGL2 (`src/face/`)
 - Projects as a 3D board book you can open and turn (`src/components/quarto/`), with a grid view
+- A footer with a looping bean bag film (`public/naplabs/`) and a leave-your-email box
 - Case study pages with animated architecture diagrams (`/work/<slug>`)
 - "Ask my agent" chat, answered by Gemini from the site's own content, with built-in answers when no model is configured
 - Contact form delivered by email through Resend, with a mail-app fallback if sending fails

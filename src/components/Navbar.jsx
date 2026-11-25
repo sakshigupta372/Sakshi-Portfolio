@@ -106,7 +106,7 @@ const Navbar = () => {
           aria-label="Primary"
           className={`pointer-events-auto mx-auto flex items-center justify-between gap-2 rounded-full border px-3 transition-[max-width,height,background-color,border-color,box-shadow] duration-500 ease-out sm:px-4 ${
             scrolled
-              ? 'h-12 max-w-[50rem] border-line bg-surface/80 shadow-[0_12px_32px_-14px_rgb(var(--ink)/0.35)] backdrop-blur-xl'
+              ? 'h-12 max-w-[54rem] border-line bg-surface/80 shadow-[0_12px_32px_-14px_rgb(var(--ink)/0.35)] backdrop-blur-xl'
               : 'h-14 max-w-[62rem] border-transparent bg-transparent'
           }`}
         >
@@ -143,7 +143,7 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex shrink-0 items-center gap-1.5 whitespace-nowrap">
             <button
               type="button"
               onClick={togglePalette}

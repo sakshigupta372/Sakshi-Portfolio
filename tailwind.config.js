@@ -29,12 +29,37 @@ export default {
         dark: v('paper'),
         'dark-secondary': v('surface'),
         'dark-tertiary': v('paper'),
+        // Footer: sampled from the bean bag film, so they stay the same in both themes.
+        bean: {
+          cream: '#ece4d5',
+          field: '#f3ece1',
+          ink: '#17171a',
+          muted: '#6c6862',
+          faint: '#a39d95',
+          line: '#ddd3c6',
+          mustard: '#e2b23a',
+          slate: '#3e5486',
+        },
       },
       fontFamily: {
         mono: ['JetBrains Mono', 'Courier New', 'monospace'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['"Instrument Serif"', '"Playfair Display"', 'Georgia', 'serif'],
         sora: ['Inter', 'system-ui', 'sans-serif'],
+        'bean-display': ['Satoshi', 'Inter', 'system-ui', 'sans-serif'],
+        'bean-text': ['Inter', 'system-ui', 'sans-serif'],
+      },
+      spacing: {
+        'bean-gutter': 'clamp(1.25rem, 5.1vw, 6.25rem)',
+      },
+      fontSize: {
+        'bean-wordmark': ['clamp(2.1rem, 2.95vw, 3.6rem)', { lineHeight: '1', letterSpacing: '-0.035em' }],
+        'bean-tagline': ['clamp(1.05rem, 1.28vw, 1.55rem)', { lineHeight: '1.45' }],
+        'bean-head': ['clamp(1.05rem, 1.27vw, 1.55rem)', { lineHeight: '1.2', letterSpacing: '-0.015em' }],
+        'bean-news': ['clamp(1.25rem, 1.5vw, 1.8rem)', { lineHeight: '1.2', letterSpacing: '-0.02em' }],
+        'bean-link': ['clamp(0.98rem, 1.1vw, 1.3rem)', { lineHeight: '1.35' }],
+        'bean-body': ['clamp(0.95rem, 1.08vw, 1.25rem)', { lineHeight: '1.55' }],
+        'bean-fine': ['clamp(0.85rem, 0.98vw, 1.15rem)', { lineHeight: '1.4' }],
       },
       animation: {
         'ping-slow': 'ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite',
