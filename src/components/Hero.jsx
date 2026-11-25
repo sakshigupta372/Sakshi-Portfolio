@@ -1,7 +1,8 @@
-import React from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import React, { useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Download, Github, Linkedin, Twitter } from 'lucide-react'
-import InteractivePortrait from './InteractivePortrait'
+import { PortraitHint, PortraitStage } from './HeroPortrait'
+import { FaceCanvas } from '../face/FaceCanvas'
 import ScrollCue from './ScrollCue'
 import RotatingText from './reactbits/RotatingText'
 import { scrollToId } from './SmoothScroll'
@@ -25,9 +26,9 @@ const ROLES = ['Agentic AI Developer', 'MCP Server Builder', 'LLM Backend Engine
 
 const Hero = () => {
   const reduce = useReducedMotion()
-  const { scrollY } = useScroll()
-  const portraitY = useTransform(scrollY, [0, 500], [0, 70])
-  const portraitScale = useTransform(scrollY, [0, 500], [1, 0.92])
+  const stageRef = useRef(null)
+  const [faceReady, setFaceReady] = useState(false)
+  const [pulled, setPulled] = useState(false)
 
   return (
     <section className="relative flex min-h-screen items-center overflow-x-hidden px-5 pb-16 pt-28 sm:px-8">
@@ -122,20 +123,20 @@ const Hero = () => {
             </motion.div>
           </div>
 
-          <motion.div variants={item} className="flex justify-center lg:justify-end">
-            <motion.div
-              style={{ y: portraitY, scale: portraitScale }}
-              className="relative w-[19rem] sm:w-[23rem] lg:w-[27rem]"
-            >
-              <InteractivePortrait />
-            </motion.div>
-          </motion.div>
+          {/* no entrance transform here: the canvas is drawn from this box's position */}
+          <div className="flex justify-center lg:justify-end">
+            <PortraitStage ref={stageRef} ready={faceReady} />
+          </div>
         </motion.div>
       </div>
 
       <div className="absolute bottom-8 left-1/2 z-20 hidden -translate-x-1/2 sm:block">
         <ScrollCue targetId="projects" />
       </div>
+
+      <FaceCanvas stageRef={stageRef} onReady={() => setFaceReady(true)} onPull={() => setPulled(true)}>
+        <PortraitHint pulled={pulled} />
+      </FaceCanvas>
     </section>
   )
 }

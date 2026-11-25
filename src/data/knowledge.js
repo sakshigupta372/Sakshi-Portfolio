@@ -20,7 +20,7 @@ const projectEntries = PROJECTS.map((p) => ({
   actions: [
     p.slug ? { label: 'Read case study', route: `/work/${p.slug}` } : null,
     isLive(p) ? { label: 'Live demo', href: p.demoLink } : null,
-    { label: 'GitHub', href: p.githubLink },
+    p.githubLink ? { label: 'GitHub', href: p.githubLink } : null,
   ].filter(Boolean),
 }))
 
@@ -270,7 +270,7 @@ export function buildContext() {
       `Result: ${p.result}`,
       `Stack: ${p.tags.join(', ')}`,
       isLive(p) ? `Live demo: ${p.demoLink}` : null,
-      `Code: ${p.githubLink}`,
+      p.githubLink ? `Code: ${p.githubLink}` : null,
     ]
     if (cs) {
       lines.push(`Overview: ${cs.overview}`)

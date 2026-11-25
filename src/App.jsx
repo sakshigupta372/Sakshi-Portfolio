@@ -9,7 +9,6 @@ import Timeline from './components/Timeline'
 import ContactForm from './components/ContactForm'
 import Footer from './components/Footer'
 import ScrollProgress from './components/ScrollProgress'
-import ScrollAnimations from './components/ScrollAnimations'
 import SmoothScroll, { scrollToId } from './components/SmoothScroll'
 import ToastHost from './components/Toast'
 import AmbientBackground from './components/AmbientBackground'
@@ -74,7 +73,6 @@ function App() {
         <div className="relative isolate min-h-screen bg-paper text-ink">
           <AmbientBackground />
           <ScrollProgress />
-          <ScrollAnimations />
           <Navbar />
           {slug ? (
             <Suspense fallback={<div className="min-h-screen" />}>
